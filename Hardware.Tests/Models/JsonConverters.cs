@@ -52,3 +52,12 @@ public class CycleConverter : JsonConverter<Cycle>
         throw new NotImplementedException();
     }
 }
+
+public sealed class BoolConverter : JsonConverter<bool>
+{
+    public override bool Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options) =>
+        reader.TokenType == JsonTokenType.Number ? reader.GetInt32() != 0 : reader.GetBoolean();
+
+    public override void Write(Utf8JsonWriter writer, bool value, JsonSerializerOptions options) =>
+        writer.WriteNumberValue(value ? 1 : 0);
+}

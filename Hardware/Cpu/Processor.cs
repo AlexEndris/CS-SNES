@@ -8,9 +8,13 @@ public partial class Processor(ICpuBus cpuBus)
 
     public void Tick()
     {
-        byte opcode = cpuBus.Read(Registers.ProgramAddress);
-        Registers.PC++;
+        byte opcode = FetchByte();
         Execute(opcode);
+    }
+    
+    private byte ReadByte(Operand operand)
+    {
+        return cpuBus.Read(operand.Address);
     }
     
     private ushort ReadWord(Operand operand)
@@ -22,6 +26,27 @@ public partial class Processor(ICpuBus cpuBus)
         return (ushort)(lowByte | (highByte << 8));
     }
 
+    private byte FetchByte()
+    {
+        byte value = cpuBus.Read(Registers.ProgramAddress);
+        Registers.PC++;
+        return value;
+    }
+    
+    private ushort FetchWord()
+    {
+        byte lowByte = FetchByte();
+        byte highByte = FetchByte();
+        return (ushort)((highByte << 8) | lowByte);
+    }
+    
+    private uint FetchLong()
+    {
+        ushort word = FetchWord();
+        byte longByte = FetchByte();
+        return (uint)((longByte << 16) | word);
+    }
+    
     private void SetZeroNegativeFlags(ushort value)
     {
         Registers.Zero = value == 0;

@@ -7,13 +7,16 @@ public record Registers
     public ushort A { get; set; }
     public ushort X { get; set; }
     public ushort Y { get; set; }
-    public ushort S { get; set; }
+    public ushort S { get; set => field = EmulationMode ? (ushort)((value & 0xFF) | 0x0100) : value; }
     public ushort D { get; set; }
-    public byte PBR { get; set; } 
-    public byte DBR { get; set; }
+
+    public byte DL => (byte)(D & 0xFF);
+    public byte DH => (byte)(D >> 8);
+    public byte Pbr { get; set; } 
+    public byte Dbr { get; set; }
     public ushort PC { get; set; }
     
-    public uint ProgramAddress => (uint)(PBR << 16 | PC);
+    public uint ProgramAddress => (uint)(Pbr << 16 | PC);
     
     public byte B { get => (byte)(A >> 8); }
     
