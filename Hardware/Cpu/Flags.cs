@@ -1,6 +1,6 @@
-﻿namespace Hardware;
+﻿namespace Hardware.Cpu;
 
-public enum CpuFlags : byte
+public enum Flags : byte
 {
     Carry = 1, // 0b00000001
     Zero = 1 << 1, // 0b00000010

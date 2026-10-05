@@ -35,9 +35,9 @@ public class CycleConverter : JsonConverter<Cycle>
             throw new JsonException("Expected [address, value, outputs] array.");
 
         reader.Read();
-        var address = reader.GetUInt32();
+        uint? address = reader.TokenType == JsonTokenType.Null ? null : reader.GetUInt32();
         reader.Read();
-        var value = reader.GetByte();
+        byte? value = reader.TokenType == JsonTokenType.Null ? null : reader.GetByte();
         reader.Read();
         var outputs = reader.GetString();
         reader.Read();
