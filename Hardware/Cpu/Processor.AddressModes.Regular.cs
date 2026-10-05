@@ -83,7 +83,7 @@ public partial class Processor
         byte lowByte = FetchByte();
         uint address = (uint)((Registers.D + lowByte) & 0x00FFFF);
 
-        if ((Registers.D & 0x00FF) > 0)
+        if (Registers.DL > 0)
             cpuBus.Idle();
         
         return WithinBank(address);
@@ -94,7 +94,7 @@ public partial class Processor
         byte lowByte = FetchByte();
         uint directAddress = (uint)((Registers.D + lowByte) & 0x00FFFF);
 
-        if ((Registers.D & 0x00FF) > 0)
+        if (Registers.DL > 0)
             cpuBus.Idle();
 
         cpuBus.Idle();
@@ -107,7 +107,7 @@ public partial class Processor
                 DL: 0
             })
         {
-            address = (uint)((Registers.D & 0xFF00) | ((lowByte + Registers.X) & 0xFF));
+            address = (uint)((Registers.DH << 8) | ((lowByte + Registers.X) & 0xFF));
         }
 
         return WithinBank(address);
@@ -118,7 +118,7 @@ public partial class Processor
         byte lowByte = FetchByte();
         uint directAddress = (uint)((Registers.D + lowByte) & 0x00FFFF);
 
-        if ((Registers.D & 0x00FF) > 0)
+        if (Registers.DL > 0)
             cpuBus.Idle();
 
         cpuBus.Idle();
@@ -131,9 +131,20 @@ public partial class Processor
                 DL: 0
             })
         {
-            address = (uint)((Registers.D & 0xFF00) | ((lowByte + Registers.Y) & 0xFF));
+            address = (uint)(Registers.DH << 8 | ((lowByte + Registers.Y) & 0xFF));
         }
 
+        return WithinBank(address);
+    }
+
+    private Operand StackRelative()
+    {
+        byte offset = FetchByte();
+
+        uint address = (uint)((Registers.S + offset) & 0x00FFFF);
+
+        cpuBus.Idle();
+        
         return WithinBank(address);
     }
 }
