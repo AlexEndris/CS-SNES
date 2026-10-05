@@ -7,7 +7,7 @@ using Cpu;
 
 public class TestCpuBus : ICpuBus
 {
-    public Dictionary<uint, byte> Ram = new();
+    public Dictionary<string, byte> Ram = new();
     public List<BusLogEntry> Log = new();
 
     public void ResetBus()
@@ -20,7 +20,7 @@ public class TestCpuBus : ICpuBus
     {
         foreach (RamEntry ramEntry in entries)
         {
-            Ram[ramEntry.Address] = ramEntry.Value;
+            Ram[$"${ramEntry.Address:X6}"] = ramEntry.Value;
         }
     }
 
@@ -30,38 +30,47 @@ public class TestCpuBus : ICpuBus
         {
             foreach (RamEntry entry in entries)
             {
-                Ram.Should().ContainKey(entry.Address, "RAM ${0:X6} should exist", entry.Address)
+                Ram.Should().ContainKey($"${entry.Address:X6}", "RAM ${0:X6} should exist", entry.Address)
                     .WhoseValue.Should().Be(entry.Value, "RAM ${0:X6}", entry.Address);
             }
 
             
-            var expected = entries.Select(e => e.Address).ToHashSet();
-            var unexpected = Ram.Keys.Where(a => !expected.Contains(a)).Select(a => $"${a:X6}");
+            var expected = entries.Select(e => $"${e.Address:X6}").ToHashSet();
+            var unexpected = Ram.Keys.Where(a => !expected.Contains(a));
             unexpected.Should().BeEmpty("the bus holds addresses the test doesn't expect");
         }
     }
 
     public void AssertCycles(string name, Cycle[] cycles)
     {
-        using (new AssertionScope())
+        using (new AssertionScope(name))
         {
-            var expected = cycles.Select(FormatCycle).ToList();
-            var actual = Log.Select(FormatLog).ToList();
-            
-            actual.Should().Equal(expected);
+            Log.Count.Should().Be(cycles.Length);
+
+            for (int i = 0; i < cycles.Length; i++)
+            {
+                FormatLog(Log[i]).Should().Be(FormatCycle(cycles[i]));
+            }
         }
     }
     
     public byte Read(uint address)
     {
-        byte value = Ram[address];
-        Log.Add(new (){Address = address, Value = value, Kind = "read"});        
-        return value;
+        try
+        {
+            byte value = Ram[$"${address:X6}"];
+            Log.Add(new (){Address = address, Value = value, Kind = "read"});      
+            return value;
+        }
+        catch (Exception e)
+        {
+            throw;
+        }
     }
 
     public void Write(uint address, byte value)
     {
-        Ram[address] = value;
+        Ram[$"${address:X6}"] = value;
         Log.Add(new (){Address = address, Value = value, Kind = "write"});        
     }
 

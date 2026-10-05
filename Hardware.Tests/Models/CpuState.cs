@@ -1,5 +1,7 @@
 ﻿namespace Hardware.Tests.Models;
 
+using System.Text.Json.Serialization;
+
 using Cpu;
 
 public class CpuState
@@ -21,7 +23,8 @@ public class CpuState
     public byte Dbr { get; set; }
 
     public ushort PC { get; set; }
-
+    
+    [JsonPropertyName("E"), JsonConverter(typeof(BoolConverter))]
     public bool EmulationMode { get; set; }
 
     public RamEntry[] Ram { get; set; }
@@ -35,9 +38,9 @@ public class CpuState
             Y = state.Y,
             S = state.S,
             P = state.P,
-            DBR = state.Dbr,
+            Dbr = state.Dbr,
             PC = state.PC,
-            PBR = state.Pbr,
+            Pbr = state.Pbr,
             D = state.D,
             EmulationMode = state.EmulationMode
         };
