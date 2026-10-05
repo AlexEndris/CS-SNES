@@ -8,10 +8,11 @@ public record struct Operand
         this.WrapMask = WrapMask;
     }
 
-    public uint Address { get; set; }
+    public uint Address { get; }
 
-    public uint WrapMask { get; set; }
+    public uint WrapMask { get; }
 
+    public static Operand WithinPage(uint address) => new Operand(address, 0x0000FF);
     public static Operand WithinBank(uint address) => new Operand(address, 0x00FFFF);
 
     public static Operand CrossBank(uint address) => new Operand(address, 0xFFFFFF);

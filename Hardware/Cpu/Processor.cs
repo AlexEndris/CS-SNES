@@ -25,6 +25,17 @@ public partial class Processor(ICpuBus cpuBus)
         
         return (ushort)(lowByte | (highByte << 8));
     }
+    
+    private uint ReadLong(Operand operand)
+    {
+        byte lowByte = cpuBus.Read(operand.Address);
+        uint midAddress = (operand.Address & ~operand.WrapMask) | ((operand.Address + 1) & operand.WrapMask);
+        byte midByte = cpuBus.Read(midAddress);
+        uint highAddress = (operand.Address & ~operand.WrapMask) | ((operand.Address + 2) & operand.WrapMask);
+        byte highByte = cpuBus.Read(highAddress);
+
+        return (uint)(lowByte | (midByte << 8) |  (highByte << 16));
+    }
 
     private byte FetchByte()
     {

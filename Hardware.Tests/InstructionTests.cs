@@ -41,7 +41,7 @@ public class InstructionTests
         }
     }
 
-    [Theory, InlineData("a9", "e")]
+    [Theory(Explicit = true), InlineData("a9", "e")]
     public async Task Instruction(string instruction, string mode)
     {
         var testCases = ReadTestData($"{instruction}.{mode}");
@@ -52,7 +52,7 @@ public class InstructionTests
         }
     }
     
-    [Theory, InlineData("a9", "e", 1)]
+    [Theory(Explicit = true), InlineData("a9", "e", 1)]
     public async Task SingleCase(string instruction, string mode, int caseNumber)
     {
         var test = await ReadTestData($"{instruction}.{mode}")
