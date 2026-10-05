@@ -13,53 +13,80 @@ public class InstructionTests
             .Select(f => Path.GetFileNameWithoutExtension(f)).Order())
         : throw new DirectoryNotFoundException(DataDirectory);
 
-    private TestCpu cpu;
-    private TestBus bus;
-    
+    private TestProcessor Processor { get; }
+
+    private TestCpuBus CpuBus { get; }
+
     public InstructionTests()
     {
-        bus = new TestBus();
-        cpu = new TestCpu(bus);
+        CpuBus = new TestCpuBus();
+        Processor = new TestProcessor(CpuBus);
     }
 
     [Theory, MemberData(nameof(TestFiles))]
-    public async Task Test1(string filename)
+    public async Task AllInstructions(string filename)
     {
         var testCases = ReadTestData(filename);
             
-
         await foreach (var test in testCases)
         {
-            if (test is null)
-            {
-                test.Should().NotBeNull();
-            }
-            
-            SetupCpu(test.Initial);
-
-            var cycles = 0;
-            do
-            {
-                cpu.Tick();
-                if (cpu.Cycle > 100)
-                {
-                    Assert.Fail($"Instruction never completed for {test.Name}");
-                }
-            } while (cpu.Cycle != 0);
-
-            AssertCpu(test.Name, test.Final);
+            TestInstruction(test);
         }
     }
 
-    private void AssertCpu(string name, CpuState state)
+    [Theory, InlineData("a9", "n")]
+    public async Task Instruction(string instruction, string mode)
     {
-        cpu.AssertState(name, state);
-        bus.AssertRam(name, state.Ram);
+        var testCases = ReadTestData($"{instruction}.{mode}");
+        
+        await foreach (var test in testCases)
+        {
+            TestInstruction(test);
+        }
+    }
+    
+    [Theory, InlineData("a9", "n", 3)]
+    public async Task SingleCase(string instruction, string mode, int caseNumber)
+    {
+        var test = await ReadTestData($"{instruction}.{mode}")
+            .FirstAsync(t => t!.Name == $"{instruction} {mode} {caseNumber}");
+
+        TestInstruction(test);
+    }
+
+    private void TestInstruction(InstructionTestData? test)
+    {
+        if (test is null)
+        {
+            test.Should().NotBeNull();
+        }
+            
+        SetupCpu(test.Initial);
+
+        var cycles = 0;
+        do
+        {
+            Processor.Tick();
+            if (Processor.Cycle > 100)
+            {
+                Assert.Fail($"Instruction never completed for {test.Name}");
+            }
+        } while (Processor.Cycle != 0);
+
+        AssertCpu(test.Name, test.Final, test.Cycles);
     }
 
     private void SetupCpu(CpuState state)
     {
-        bus.SetRam(state.Ram);
-        cpu.SetState(state);
+        CpuBus.ResetBus();
+        CpuBus.SetRam(state.Ram);
+        Processor.SetState(state);
+    }
+
+    private void AssertCpu(string name, CpuState state, Cycle[] cycles)
+    {
+        Processor.AssertState(name, state);
+        CpuBus.AssertRam(name, state.Ram);
+        CpuBus.AssertCycles(name, cycles);
     }
 }
