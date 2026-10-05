@@ -64,7 +64,7 @@ public class TestCpuBus : ICpuBus
         }
         catch (Exception e)
         {
-            throw;
+            throw new KeyNotFoundException($"{e.Message}\r\nExisting Keys: [{string.Join(", ",Ram.Keys)}]",e);
         }
     }
 
