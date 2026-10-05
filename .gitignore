@@ -29,6 +29,7 @@ project.fragment.lock.json
 artifacts/
 
 .idea
+*.DotSettings.user
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
