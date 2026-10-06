@@ -18,6 +18,7 @@ public partial class Processor
             case 0x13: Ora(StackRelativeIndirectY()); break;
             case 0x15: Ora(DirectX()); break;
             case 0x17: Ora(DirectIndirectLongY()); break;
+            case 0x18: Clc(Implied()); break;
             case 0x19: Ora(AbsoluteY()); break;
             case 0x1D: Ora(AbsoluteX()); break;
             case 0x1F: Ora(AbsoluteLongX()); break;
@@ -36,6 +37,7 @@ public partial class Processor
             case 0x34: Bit(DirectX()); break;
             case 0x35: And(DirectX()); break;
             case 0x37: And(DirectIndirectLongY()); break;
+            case 0x38: Sec(Implied()); break;
             case 0x39: And(AbsoluteY()); break;
             case 0x3C: Bit(AbsoluteX()); break;
             case 0x3D: And(AbsoluteX()); break;
@@ -53,11 +55,13 @@ public partial class Processor
             case 0x53: Eor(StackRelativeIndirectY()); break;
             case 0x55: Eor(DirectX()); break;
             case 0x57: Eor(DirectIndirectLongY()); break;
+            case 0x58: Cli(Implied()); break;
             case 0x59: Eor(AbsoluteY()); break;
             case 0x5D: Eor(AbsoluteX()); break;
             case 0x5F: Eor(AbsoluteLongX()); break;
             case 0x64: Stz(Direct()); break;
             case 0x74: Stz(DirectX()); break;
+            case 0x78: Sei(Implied()); break;
             case 0x81: Sta(DirectIndexedIndirect()); break;
             case 0x83: Sta(StackRelative()); break;
             case 0x84: Sty(Direct()); break;
@@ -101,6 +105,7 @@ public partial class Processor
             case 0xB5: Lda(DirectX()); break;
             case 0xB6: Ldx(DirectY()); break;
             case 0xB7: Lda(DirectIndirectLongY()); break;
+            case 0xB8: Clv(Implied()); break;
             case 0xB9: Lda(AbsoluteY()); break;
             case 0xBC: Ldy(AbsoluteX()); break;
             case 0xBD: Lda(AbsoluteX()); break;
@@ -120,6 +125,7 @@ public partial class Processor
             case 0xD3: Cmp(StackRelativeIndirectY()); break;
             case 0xD5: Cmp(DirectX()); break;
             case 0xD7: Cmp(DirectIndirectLongY()); break;
+            case 0xD8: Cld(Implied()); break;
             case 0xD9: Cmp(AbsoluteY()); break;
             case 0xDD: Cmp(AbsoluteX()); break;
             case 0xDF: Cmp(AbsoluteLongX()); break;
@@ -127,6 +133,7 @@ public partial class Processor
             case 0xE4: Cpx(Direct()); break;
             case 0xEC: Cpx(Absolute()); break;
             case 0xEA: Nop(Implied()); break;
+            case 0xF8: Sed(Implied()); break;
             default:
                 throw new NotImplementedException($"Opcode ${opcode:X2}");
         }
