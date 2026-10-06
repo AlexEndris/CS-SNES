@@ -6,7 +6,7 @@ using Models;
 
 public static class TestDataHelper
 {
-    public static readonly string DataDirectory = Path.Combine(GetRepoRoot(), "tests\\SingleStepTests\\65618\\v1\\");
+    public static readonly string DataDirectory = Path.Combine(GetRepoRoot(), "tests","SingleStepTests","65618","v1");
 
     private static string GetRepoRoot()
     {
