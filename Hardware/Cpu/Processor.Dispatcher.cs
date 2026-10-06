@@ -49,6 +49,7 @@ public partial class Processor
             case 0x43: Eor(StackRelative()); break;
             case 0x45: Eor(Direct()); break;
             case 0x47: Eor(DirectIndirectLong()); break;
+            case 0x48: Pha(Implied()); break;
             case 0x49: Eor(ImmediateM()); break;
             case 0x4D: Eor(Absolute()); break;
             case 0x4F: Eor(AbsoluteLong()); break;
@@ -59,12 +60,16 @@ public partial class Processor
             case 0x57: Eor(DirectIndirectLongY()); break;
             case 0x58: Cli(Implied()); break;
             case 0x59: Eor(AbsoluteY()); break;
+            case 0x5A: Phy(Implied()); break;
             case 0x5B: Tcd(Implied()); break;
             case 0x5D: Eor(AbsoluteX()); break;
             case 0x5F: Eor(AbsoluteLongX()); break;
+            case 0x62: Per(Immediate16()); break;
             case 0x64: Stz(Direct()); break;
+            case 0x68: Pla(Implied()); break;
             case 0x74: Stz(DirectX()); break;
             case 0x78: Sei(Implied()); break;
+            case 0x7A: Ply(Implied()); break;
             case 0x7B: Tdc(Implied()); break;
             case 0x81: Sta(DirectIndexedIndirect()); break;
             case 0x83: Sta(StackRelative()); break;
@@ -136,10 +141,12 @@ public partial class Processor
             case 0xD1: Cmp(DirectIndirectY()); break;
             case 0xD2: Cmp(DirectIndirect()); break;
             case 0xD3: Cmp(StackRelativeIndirectY()); break;
+            case 0xD4: Pei(Direct()); break;
             case 0xD5: Cmp(DirectX()); break;
             case 0xD7: Cmp(DirectIndirectLongY()); break;
             case 0xD8: Cld(Implied()); break;
             case 0xD9: Cmp(AbsoluteY()); break;
+            case 0xDA: Phx(Implied()); break;
             case 0xDD: Cmp(AbsoluteX()); break;
             case 0xDF: Cmp(AbsoluteLongX()); break;
             case 0xE0: Cpx(ImmediateX()); break;
@@ -148,7 +155,9 @@ public partial class Processor
             case 0xEC: Cpx(Absolute()); break;
             case 0xEA: Nop(Implied()); break;
             case 0xEB: Xba(Implied()); break;
+            case 0xF4: Pea(Immediate16()); break;
             case 0xF8: Sed(Implied()); break;
+            case 0xFA: Plx(Implied()); break;
             case 0xFB: Xce(Implied()); break;
             default:
                 throw new NotImplementedException($"Opcode ${opcode:X2}");
