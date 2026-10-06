@@ -10,7 +10,7 @@ public static class TestDataHelper
 
     private static string GetRepoRoot()
     {
-        return Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\..\\..\\"));
+        return Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..","..","..",".."));
     }
     
     public static string GetFilePath(string filenameWithoutExtension)
