@@ -20,7 +20,7 @@ public partial class Processor(ICpuBus cpuBus)
     private ushort ReadWord(Operand operand)
     {
         byte lowByte = cpuBus.Read(operand.Address);
-        uint highAddress = (operand.Address & ~operand.WrapMask) | ((operand.Address + 1) & operand.WrapMask);
+        uint highAddress = CalculateAddressWithWrapMask(operand, 1);
         byte highByte = cpuBus.Read(highAddress);
         
         return (ushort)(lowByte | (highByte << 8));
@@ -29,12 +29,17 @@ public partial class Processor(ICpuBus cpuBus)
     private uint ReadLong(Operand operand)
     {
         byte lowByte = cpuBus.Read(operand.Address);
-        uint midAddress = (operand.Address & ~operand.WrapMask) | ((operand.Address + 1) & operand.WrapMask);
+        uint midAddress = CalculateAddressWithWrapMask(operand, 1);
         byte midByte = cpuBus.Read(midAddress);
-        uint highAddress = (operand.Address & ~operand.WrapMask) | ((operand.Address + 2) & operand.WrapMask);
+        uint highAddress = CalculateAddressWithWrapMask(operand, 2);
         byte highByte = cpuBus.Read(highAddress);
 
         return (uint)(lowByte | (midByte << 8) |  (highByte << 16));
+    }
+
+    private static uint CalculateAddressWithWrapMask(Operand operand, int offset)
+    {
+        return (uint)((operand.Address & ~operand.WrapMask) | ((operand.Address + offset) & operand.WrapMask));
     }
 
     private void WriteByte(Operand operand, byte value)
@@ -45,7 +50,7 @@ public partial class Processor(ICpuBus cpuBus)
     private void WriteWord(Operand operand, ushort value)
     {
         cpuBus.Write(operand.Address, (byte)value);
-        uint highAddress = (operand.Address & ~operand.WrapMask) | ((operand.Address + 1) & operand.WrapMask);
+        uint highAddress = CalculateAddressWithWrapMask(operand, 1);
         cpuBus.Write(highAddress, (byte)(value >> 8));
     }
 
@@ -69,16 +74,26 @@ public partial class Processor(ICpuBus cpuBus)
         byte longByte = FetchByte();
         return (uint)((longByte << 16) | word);
     }
+
+    private void SetZeroFlag(ushort value)
+    {
+        Registers.Zero = value == 0;
+    }
     
     private void SetZeroNegativeFlags(ushort value)
     {
-        Registers.Zero = value == 0;
+        SetZeroFlag(value);
         Registers.Negative = (value & 0x8000) > 0;
     }
     
     private void SetZeroNegativeFlags(byte value)
     {
-        Registers.Zero = value == 0;
+        SetZeroFlag(value);
         Registers.Negative = (value & 0x80) > 0;
+    }
+
+    private void SetCarryFlagForCmp(ushort original, ushort value)
+    {
+        Registers.Carry = original >= value;
     }
 }

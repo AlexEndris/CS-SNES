@@ -56,6 +56,26 @@ public partial class Processor
             case 0xBD: Lda(AbsoluteX()); break;
             case 0xBE: Ldx(AbsoluteY()); break;
             case 0xBF: Lda(AbsoluteLongX()); break;
+            case 0xC0: Cpy(ImmediateX()); break;
+            case 0xC1: Cmp(DirectIndexedIndirect()); break;
+            case 0xC3: Cmp(StackRelative()); break;
+            case 0xC4: Cpy(Direct()); break;
+            case 0xC5: Cmp(Direct()); break;
+            case 0xC7: Cmp(DirectIndirectLong()); break;
+            case 0xCC: Cpy(Absolute()); break;
+            case 0xCD: Cmp(Absolute()); break;
+            case 0xCF: Cmp(AbsoluteLong()); break;
+            case 0xD1: Cmp(DirectIndirectY()); break;
+            case 0xD2: Cmp(DirectIndirect()); break;
+            case 0xD3: Cmp(StackRelativeIndirectY()); break;
+            case 0xD5: Cmp(DirectX()); break;
+            case 0xD7: Cmp(DirectIndirectLongY()); break;
+            case 0xD9: Cmp(AbsoluteY()); break;
+            case 0xDD: Cmp(AbsoluteX()); break;
+            case 0xDF: Cmp(AbsoluteLongX()); break;
+            case 0xE0: Cpx(ImmediateX()); break;
+            case 0xE4: Cpx(Direct()); break;
+            case 0xEC: Cpx(Absolute()); break;
             case 0xEA: Nop(Implied()); break;
             default:
                 throw new NotImplementedException($"Opcode ${opcode:X2}");
