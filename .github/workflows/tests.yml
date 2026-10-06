@@ -1,0 +1,81 @@
+﻿name: Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+env:
+  TEST_DATA_PATH: tests/SingleStepTests/65618
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      checks: write          # needed by the test reporter to create the check run
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1     # submodule handled separately below, via the cache
+
+      # The commit the repository pins the submodule to. Used as the cache key,
+      # so the cache stays valid until the submodule is deliberately moved.
+      - name: Get test-data commit
+        id: testdata
+        run: echo "sha=$(git rev-parse HEAD:${TEST_DATA_PATH})" >> "$GITHUB_OUTPUT"
+
+      - name: Cache test data
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.TEST_DATA_PATH }}
+          key: singlestep-${{ steps.testdata.outputs.sha }}
+
+      - name: Fetch test data
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: git submodule update --init --depth 1 "${TEST_DATA_PATH}"
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      # Requires global.json opting dotnet test into Microsoft.Testing.Platform.
+      # --report-xunit-trx is built into xUnit v3; no extra package needed.
+      - name: Test
+        run: >
+          dotnet test --no-build --configuration Release
+          --results-directory TestResults
+          --report-xunit-trx
+
+      # Turns the TRX file into a check run on the pull request:
+      # passed / failed / skipped counts, with failure messages per test.
+      - name: Test report
+        if: always()         # report failures too, not only successes
+        uses: dorny/test-reporter@v1
+        with:
+          name: Test results
+          path: 'TestResults/**/*.trx'
+          reporter: dotnet-trx
+          fail-on-error: true
+
+      # The raw TRX, downloadable from the run page.
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults/
