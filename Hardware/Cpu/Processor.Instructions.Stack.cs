@@ -99,6 +99,26 @@ public partial class Processor
             SetZeroNegativeFlags(Registers.Y);
         }
     }
+
+    private void Phb(Operand _)
+    {
+        Push(Registers.Dbr);
+    }
+
+    private void Phd(Operand _)
+    {
+        Push(Registers.D);
+    }
+
+    private void Phk(Operand _)
+    {
+        Push(Registers.Pbr);
+    }
+
+    private void Php(Operand _)
+    {
+        Push(Registers.P);
+    }
     
     private void Push(ushort value)
     {

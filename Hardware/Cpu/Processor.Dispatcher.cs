@@ -10,7 +10,9 @@ public partial class Processor
             case 0x03: Ora(StackRelative()); break;
             case 0x05: Ora(Direct()); break;
             case 0x07: Ora(DirectIndirectLong()); break;
+            case 0x08: Php(Implied()); break;
             case 0x09: Ora(ImmediateM()); break;
+            case 0x0B: Phd(Implied()); break;
             case 0x0D: Ora(Absolute()); break;
             case 0x0F: Ora(AbsoluteLong()); break;
             case 0x11: Ora(DirectIndirectY()); break;
@@ -51,6 +53,7 @@ public partial class Processor
             case 0x47: Eor(DirectIndirectLong()); break;
             case 0x48: Pha(Implied()); break;
             case 0x49: Eor(ImmediateM()); break;
+            case 0x4B: Phk(Implied()); break;
             case 0x4D: Eor(Absolute()); break;
             case 0x4F: Eor(AbsoluteLong()); break;
             case 0x51: Eor(DirectIndirectY()); break;
@@ -79,6 +82,7 @@ public partial class Processor
             case 0x87: Sta(DirectIndirectLong()); break;
             case 0x89: BitImm(ImmediateM()); break;
             case 0x8A: Txa(Implied()); break;
+            case 0x8B: Phb(Implied()); break;
             case 0x8C: Sty(Absolute()); break;
             case 0x8D: Sta(Absolute()); break;
             case 0x8E: Stx(Absolute()); break;
