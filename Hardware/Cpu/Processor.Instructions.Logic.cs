@@ -23,7 +23,7 @@ public partial class Processor
         if (Registers.M8)
         {
             byte value = ReadByte(operand);
-            Registers.A = (ushort)((Registers.A & 0xFF00) | ((Registers.A & 0x00FF) ^ value));
+            Registers.A ^= value;
             SetZeroNegativeFlags((byte)Registers.A);
         }
         else
