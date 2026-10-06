@@ -36,4 +36,23 @@ public partial class Processor
     {
         Registers.IrqDisable = true;
     }
+
+    private void Rep(Operand operand)
+    {
+        byte value = ReadByte(operand);
+        Registers.P &= (byte)~value;
+        cpuBus.Idle();
+    }
+
+    private void Sep(Operand operand)
+    {
+        byte value = ReadByte(operand);
+        Registers.P |= value;
+        cpuBus.Idle();
+    }
+
+    private void Xce(Operand _)
+    {
+        (Registers.Carry, Registers.EmulationMode) = (Registers.EmulationMode, Registers.Carry);
+    }
 }
