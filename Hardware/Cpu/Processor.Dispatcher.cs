@@ -6,6 +6,12 @@ public partial class Processor
     {
         switch (opcode)
         {
+            case 0x81: Sta(DirectIndexedIndirect()); break;
+            case 0x83: Sta(StackRelative()); break;
+            case 0x85: Sta(DirectPage()); break;
+            case 0x87: Sta(DirectIndirectLong()); break;
+            case 0x8D: Sta(Absolute()); break;
+            case 0x8F: Sta(AbsoluteLong()); break;
             case 0xA0: Ldy(ImmediateX()); break;
             case 0xA1: Lda(DirectIndexedIndirect()); break;
             case 0xA2: Ldx(ImmediateX()); break;

@@ -37,6 +37,18 @@ public partial class Processor(ICpuBus cpuBus)
         return (uint)(lowByte | (midByte << 8) |  (highByte << 16));
     }
 
+    private void WriteByte(Operand operand, byte value)
+    {
+        cpuBus.Write(operand.Address, value);
+    }
+
+    private void WriteWord(Operand operand, ushort value)
+    {
+        cpuBus.Write(operand.Address, (byte)value);
+        uint highAddress = (operand.Address & ~operand.WrapMask) | ((operand.Address + 1) & operand.WrapMask);
+        cpuBus.Write(highAddress, (byte)(value >> 8));
+    }
+
     private byte FetchByte()
     {
         byte value = cpuBus.Read(Registers.ProgramAddress);
