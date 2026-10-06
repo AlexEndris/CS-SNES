@@ -74,16 +74,26 @@ public partial class Processor(ICpuBus cpuBus)
         byte longByte = FetchByte();
         return (uint)((longByte << 16) | word);
     }
+
+    private void SetZeroFlag(ushort value)
+    {
+        Registers.Zero = value == 0;
+    }
     
     private void SetZeroNegativeFlags(ushort value)
     {
-        Registers.Zero = value == 0;
+        SetZeroFlag(value);
         Registers.Negative = (value & 0x8000) > 0;
     }
     
     private void SetZeroNegativeFlags(byte value)
     {
-        Registers.Zero = value == 0;
+        SetZeroFlag(value);
         Registers.Negative = (value & 0x80) > 0;
+    }
+
+    private void SetCarryFlagForCmp(ushort original, ushort value)
+    {
+        Registers.Carry = original >= value;
     }
 }
