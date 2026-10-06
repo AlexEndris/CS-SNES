@@ -10,6 +10,13 @@ public partial class Processor
         return Nothing;
     }
 
+    private Operand Immediate8()
+    {
+        uint address = Registers.ProgramAddress;
+        Registers.PC++;
+        return WithinBank(address);
+    }
+    
     private Operand ImmediateM()
     {
         uint address = Registers.ProgramAddress;
@@ -78,7 +85,7 @@ public partial class Processor
         return CrossBank(address);
     }
 
-    private Operand DirectPage()
+    private Operand Direct()
     {
         byte lowByte = FetchByte();
         uint address = (uint)((Registers.D + lowByte) & 0x00FFFF);
@@ -89,7 +96,7 @@ public partial class Processor
         return WithinBank(address);
     }
     
-    private Operand DirectPageX()
+    private Operand DirectX()
     {
         byte lowByte = FetchByte();
         uint directAddress = (uint)((Registers.D + lowByte) & 0x00FFFF);
@@ -113,7 +120,7 @@ public partial class Processor
         return WithinBank(address);
     }
     
-    private Operand DirectPageY()
+    private Operand DirectY()
     {
         byte lowByte = FetchByte();
         uint directAddress = (uint)((Registers.D + lowByte) & 0x00FFFF);
