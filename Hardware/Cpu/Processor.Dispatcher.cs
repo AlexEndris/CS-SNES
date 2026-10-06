@@ -69,6 +69,7 @@ public partial class Processor
             case 0x86: Stx(Direct()); break;
             case 0x87: Sta(DirectIndirectLong()); break;
             case 0x89: BitImm(ImmediateM()); break;
+            case 0x8A: Txa(Implied()); break;
             case 0x8C: Sty(Absolute()); break;
             case 0x8D: Sta(Absolute()); break;
             case 0x8E: Stx(Absolute()); break;
@@ -80,7 +81,10 @@ public partial class Processor
             case 0x95: Sta(DirectX()); break;
             case 0x96: Stx(DirectY()); break;
             case 0x97: Sta(DirectIndirectLongY()); break;
+            case 0x98: Tya(Implied()); break;
             case 0x99: Sta(AbsoluteY(true)); break;
+            case 0x9A: Txs(Implied()); break;
+            case 0x9B: Txy(Implied()); break;
             case 0x9C: Stz(Absolute()); break;
             case 0x9D: Sta(AbsoluteX(true)); break;
             case 0x9E: Stz(AbsoluteX(true)); break;
@@ -93,7 +97,9 @@ public partial class Processor
             case 0xA5: Lda(Direct()); break;
             case 0xA6: Ldx(Direct()); break;
             case 0xA7: Lda(DirectIndirectLong()); break;
+            case 0xA8: Tay(Implied()); break;
             case 0xA9: Lda(ImmediateM()); break;
+            case 0xAA: Tax(Implied()); break;
             case 0xAC: Ldy(Absolute()); break;
             case 0xAD: Lda(Absolute()); break;
             case 0xAE: Ldx(Absolute()); break;
@@ -107,6 +113,8 @@ public partial class Processor
             case 0xB7: Lda(DirectIndirectLongY()); break;
             case 0xB8: Clv(Implied()); break;
             case 0xB9: Lda(AbsoluteY()); break;
+            case 0xBA: Tsx(Implied()); break;
+            case 0xBB: Tyx(Implied()); break;
             case 0xBC: Ldy(AbsoluteX()); break;
             case 0xBD: Lda(AbsoluteX()); break;
             case 0xBE: Ldx(AbsoluteY()); break;
