@@ -10,6 +10,13 @@ public partial class Processor
         return Nothing;
     }
 
+    private Operand Immediate8()
+    {
+        uint address = Registers.ProgramAddress;
+        Registers.PC++;
+        return WithinBank(address);
+    }
+    
     private Operand ImmediateM()
     {
         uint address = Registers.ProgramAddress;

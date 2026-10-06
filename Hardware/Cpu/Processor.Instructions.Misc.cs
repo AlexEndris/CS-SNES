@@ -6,4 +6,9 @@ public partial class Processor
     {
         // Nothing
     }
+    
+    private void Wdm(Operand _)
+    {
+        cpuBus.Idle();
+    }
 }
