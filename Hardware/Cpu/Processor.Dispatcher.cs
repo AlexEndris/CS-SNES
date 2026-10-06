@@ -30,7 +30,9 @@ public partial class Processor
             case 0x24: Bit(Direct()); break;
             case 0x25: And(Direct()); break;
             case 0x27: And(DirectIndirectLong()); break;
+            case 0x28: Plp(Implied()); break;
             case 0x29: And(ImmediateM()); break;
+            case 0x2B: Pld(Implied()); break;
             case 0x2C: Bit(Absolute()); break;
             case 0x2D: And(Absolute()); break;
             case 0x2F: And(AbsoluteLong()); break;
@@ -113,6 +115,7 @@ public partial class Processor
             case 0xA8: Tay(Implied()); break;
             case 0xA9: Lda(ImmediateM()); break;
             case 0xAA: Tax(Implied()); break;
+            case 0xAB: Plb(Implied()); break;
             case 0xAC: Ldy(Absolute()); break;
             case 0xAD: Lda(Absolute()); break;
             case 0xAE: Ldx(Absolute()); break;

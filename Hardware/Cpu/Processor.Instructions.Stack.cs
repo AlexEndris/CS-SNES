@@ -60,7 +60,7 @@ public partial class Processor
         cpuBus.Idle();
         if (Registers.M8)
         {
-            Registers.A = (ushort)((Registers.A & 0xFF00) | PullByte());
+            Registers.A = (ushort)((Registers.A & 0xFF00) | PullByteWrapping());
             SetZeroNegativeFlags((byte)Registers.A);
         }
         else
@@ -75,7 +75,7 @@ public partial class Processor
         cpuBus.Idle();
         if (Registers.X8)
         {
-            Registers.X = (ushort)((Registers.X & 0xFF00) | PullByte());
+            Registers.X = (ushort)((Registers.X & 0xFF00) | PullByteWrapping());
             SetZeroNegativeFlags((byte)Registers.X);
         }
         else
@@ -90,7 +90,7 @@ public partial class Processor
         cpuBus.Idle();
         if (Registers.X8)
         {
-            Registers.Y = (ushort)((Registers.Y & 0xFF00) | PullByte());
+            Registers.Y = (ushort)((Registers.Y & 0xFF00) | PullByteWrapping());
             SetZeroNegativeFlags((byte)Registers.Y);
         }
         else
@@ -120,6 +120,26 @@ public partial class Processor
         Push(Registers.P);
     }
     
+    private void Plb(Operand _)
+    {
+        cpuBus.Idle();
+        Registers.Dbr = PullByte();
+        SetZeroNegativeFlags(Registers.Dbr);
+    }
+
+    private void Pld(Operand _)
+    {
+        cpuBus.Idle();
+        Registers.D = PullWord();
+        SetZeroNegativeFlags(Registers.D);
+    }
+
+    private void Plp(Operand _)
+    {
+        cpuBus.Idle();
+        Registers.P = PullByteWrapping();
+    }
+    
     private void Push(ushort value)
     {
         var pointer = Registers.S;
@@ -145,10 +165,18 @@ public partial class Processor
         return (ushort)(high << 8 | low);
     }
     
-    private byte PullByte()
+    private byte PullByteWrapping()
     {
         Registers.S++;
         return cpuBus.Read(Registers.S);
+    }
+    
+    private byte PullByte()
+    {
+        ushort pointer = Registers.S;
+        pointer++;
+        Registers.S = pointer;
+        return cpuBus.Read(pointer);
     }
     
     private void StackOperation(Operand operand)
