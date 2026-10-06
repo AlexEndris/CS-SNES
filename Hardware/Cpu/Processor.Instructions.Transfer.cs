@@ -104,4 +104,38 @@ public partial class Processor
     {
         Registers.S = Registers.X;
     }
+
+    private void Tcd(Operand _)
+    {
+        Registers.D = Registers.A;
+        SetZeroNegativeFlags(Registers.D);
+    }
+
+    private void Tcs(Operand _)
+    {
+        Registers.S = Registers.A;
+    }
+    
+    private void Tdc(Operand _)
+    {
+        Registers.A = Registers.D;
+        SetZeroNegativeFlags(Registers.A);
+    }
+    
+    private void Tsc(Operand _)
+    {
+        Registers.A = Registers.S;
+        SetZeroNegativeFlags(Registers.A);
+    }
+
+    private void Xba(Operand _)
+    {
+        byte a = (byte)Registers.A;
+        byte b = (byte)(Registers.A >> 8);
+
+        Registers.A = (ushort)((a << 8) | b);
+        
+        SetZeroNegativeFlags((byte)Registers.A);
+        cpuBus.Idle();
+    }
 }
