@@ -58,5 +58,4 @@ public partial class Processor
             SetCarryFlagForCmp(Registers.Y, value);
         }
     }
-
 }
