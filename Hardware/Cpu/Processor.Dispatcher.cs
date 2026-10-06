@@ -6,6 +6,7 @@ public partial class Processor
     {
         switch (opcode)
         {
+            case 0x42: Wdm(Immediate8()); break;
             case 0x64: Stz(Direct()); break;
             case 0x74: Stz(DirectX()); break;
             case 0x81: Sta(DirectIndexedIndirect()); break;
