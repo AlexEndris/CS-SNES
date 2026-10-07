@@ -20,6 +20,7 @@ public partial class Processor
             case 0x0D: Ora(Absolute()); break;
             case 0x0E: Asl(Absolute()); break;
             case 0x0F: Ora(AbsoluteLong()); break;
+            case 0x10: Bpl(Relative8()); break;
             case 0x11: Ora(DirectIndirectY()); break;
             case 0x12: Ora(DirectIndirect()); break;
             case 0x13: Ora(StackRelativeIndirectY()); break;
@@ -49,6 +50,7 @@ public partial class Processor
             case 0x2D: And(Absolute()); break;
             case 0x2E: Rol(Absolute()); break;
             case 0x2F: And(AbsoluteLong()); break;
+            case 0x30: Bmi(Relative8()); break;
             case 0x31: And(DirectIndirectY()); break;
             case 0x32: And(DirectIndirect()); break;
             case 0x33: And(StackRelativeIndirectY()); break;
@@ -77,6 +79,7 @@ public partial class Processor
             case 0x4D: Eor(Absolute()); break;
             case 0x4E: Lsr(Absolute()); break;
             case 0x4F: Eor(AbsoluteLong()); break;
+            case 0x50: Bvc(Relative8()); break;
             case 0x51: Eor(DirectIndirectY()); break;
             case 0x52: Eor(DirectIndirect()); break;
             case 0x53: Eor(StackRelativeIndirectY()); break;
@@ -96,13 +99,16 @@ public partial class Processor
             case 0x68: Pla(Implied()); break;
             case 0x6A: RorA(Implied()); break;
             case 0x6E: Ror(Absolute()); break;
+            case 0x70: Bvs(Relative8()); break;
             case 0x74: Stz(DirectX()); break;
             case 0x76: Ror(DirectX()); break;
             case 0x78: Sei(Implied()); break;
             case 0x7A: Ply(Implied()); break;
             case 0x7B: Tdc(Implied()); break;
             case 0x7E: Ror(AbsoluteX(true)); break;
+            case 0x80: Bra(Relative8()); break;
             case 0x81: Sta(DirectIndexedIndirect()); break;
+            case 0x82: Brl(Relative16()); break;
             case 0x83: Sta(StackRelative()); break;
             case 0x84: Sty(Direct()); break;
             case 0x85: Sta(Direct()); break;
@@ -116,6 +122,7 @@ public partial class Processor
             case 0x8D: Sta(Absolute()); break;
             case 0x8E: Stx(Absolute()); break;
             case 0x8F: Sta(AbsoluteLong()); break;
+            case 0x90: Bcc(Relative8()); break;
             case 0x91: Sta(DirectIndirectY(true)); break;
             case 0x92: Sta(DirectIndirect()); break;
             case 0x93: Sta(StackRelativeIndirectY()); break;
@@ -147,6 +154,7 @@ public partial class Processor
             case 0xAD: Lda(Absolute()); break;
             case 0xAE: Ldx(Absolute()); break;
             case 0xAF: Lda(AbsoluteLong()); break;
+            case 0xB0: Bcs(Relative8()); break;
             case 0xB1: Lda(DirectIndirectY()); break;
             case 0xB2: Lda(DirectIndirect()); break;
             case 0xB3: Lda(StackRelativeIndirectY()); break;
@@ -176,6 +184,7 @@ public partial class Processor
             case 0xCD: Cmp(Absolute()); break;
             case 0xCE: Dec(Absolute()); break;
             case 0xCF: Cmp(AbsoluteLong()); break;
+            case 0xD0: Bne(Relative8()); break;
             case 0xD1: Cmp(DirectIndirectY()); break;
             case 0xD2: Cmp(DirectIndirect()); break;
             case 0xD3: Cmp(StackRelativeIndirectY()); break;
@@ -198,6 +207,7 @@ public partial class Processor
             case 0xEB: Xba(Implied()); break;
             case 0xEC: Cpx(Absolute()); break;
             case 0xEE: Inc(Absolute()); break;
+            case 0xF0: Beq(Relative8()); break;
             case 0xF4: Pea(Immediate16()); break;
             case 0xF6: Inc(DirectX()); break;
             case 0xF8: Sed(Implied()); break;
