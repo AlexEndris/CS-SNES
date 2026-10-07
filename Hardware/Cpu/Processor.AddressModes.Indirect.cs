@@ -4,6 +4,36 @@ using static Operand;
 
 public partial class Processor
 {
+    private Operand AbsoluteIndirect()
+    {
+        ushort pointer = FetchWord();
+        
+        uint address = (uint)((Registers.Pbr << 16) | ReadWord(WithinBank(pointer)));
+
+        return CrossBank(address);
+    }
+    
+    private Operand AbsoluteIndirectLong()
+    {
+        ushort pointer = FetchWord();
+
+        uint address = ReadLong(WithinBank(pointer));
+        
+        return CrossBank(address);
+    }
+    
+    private Operand AbsoluteIndexedIndirect()
+    {
+        ushort basePointer = FetchWord();
+        ushort pointer = (ushort)((basePointer + Registers.X) & 0xFFFF);
+
+        uint pointerAddress = (uint)((Registers.Pbr << 16) | pointer);
+        cpuBus.Idle();
+        ushort address = ReadWord(WithinBank(pointerAddress));
+
+        return CrossBank(address);
+    }
+    
     private Operand DirectIndirect()
     {
         byte lowByte = FetchByte();

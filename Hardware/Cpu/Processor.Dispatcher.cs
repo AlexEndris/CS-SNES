@@ -36,7 +36,9 @@ public partial class Processor
             case 0x1D: Ora(AbsoluteX()); break;
             case 0x1E: Asl(AbsoluteX(true)); break;
             case 0x1F: Ora(AbsoluteLongX()); break;
+            case 0x20: Jsr(Absolute()); break;
             case 0x21: And(DirectIndexedIndirect()); break;
+            case 0x22: Jsl(Absolute()); break;
             case 0x23: And(StackRelative()); break;
             case 0x24: Bit(Direct()); break;
             case 0x25: And(Direct()); break;
@@ -76,6 +78,7 @@ public partial class Processor
             case 0x49: Eor(ImmediateM()); break;
             case 0x4A: LsrA(Implied()); break;
             case 0x4B: Phk(Implied()); break;
+            case 0x4C: Jmp(Absolute()); break;
             case 0x4D: Eor(Absolute()); break;
             case 0x4E: Lsr(Absolute()); break;
             case 0x4F: Eor(AbsoluteLong()); break;
@@ -90,14 +93,18 @@ public partial class Processor
             case 0x59: Eor(AbsoluteY()); break;
             case 0x5A: Phy(Implied()); break;
             case 0x5B: Tcd(Implied()); break;
+            case 0x5C: Jml(AbsoluteLong()); break;
             case 0x5D: Eor(AbsoluteX()); break;
             case 0x5E: Lsr(AbsoluteX(true)); break;
             case 0x5F: Eor(AbsoluteLongX()); break;
+            case 0x60: Rts(Implied()); break;
             case 0x62: Per(Immediate16()); break;
             case 0x64: Stz(Direct()); break;
             case 0x66: Ror(Direct()); break;
             case 0x68: Pla(Implied()); break;
             case 0x6A: RorA(Implied()); break;
+            case 0x6B: Rtl(Implied()); break;
+            case 0x6C: Jmp(AbsoluteIndirect()); break;
             case 0x6E: Ror(Absolute()); break;
             case 0x70: Bvs(Relative8()); break;
             case 0x74: Stz(DirectX()); break;
@@ -105,6 +112,7 @@ public partial class Processor
             case 0x78: Sei(Implied()); break;
             case 0x7A: Ply(Implied()); break;
             case 0x7B: Tdc(Implied()); break;
+            case 0x7C: Jmp(AbsoluteIndexedIndirect()); break;
             case 0x7E: Ror(AbsoluteX(true)); break;
             case 0x80: Bra(Relative8()); break;
             case 0x81: Sta(DirectIndexedIndirect()); break;
@@ -195,6 +203,7 @@ public partial class Processor
             case 0xD8: Cld(Implied()); break;
             case 0xD9: Cmp(AbsoluteY()); break;
             case 0xDA: Phx(Implied()); break;
+            case 0xDC: Jml(AbsoluteIndirectLong()); break;
             case 0xDD: Cmp(AbsoluteX()); break;
             case 0xDE: Dec(AbsoluteX(true)); break;
             case 0xDF: Cmp(AbsoluteLongX()); break;
@@ -213,6 +222,7 @@ public partial class Processor
             case 0xF8: Sed(Implied()); break;
             case 0xFA: Plx(Implied()); break;
             case 0xFB: Xce(Implied()); break;
+            case 0xFC: JsrIndirect(); break;
             case 0xFE: Inc(AbsoluteX(true)); break;
             default:
                 throw new NotImplementedException($"Opcode ${opcode:X2}");
