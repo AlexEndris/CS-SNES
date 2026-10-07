@@ -8,6 +8,7 @@ public partial class Processor
         {
             case 0x01: Ora(DirectIndexedIndirect()); break;
             case 0x03: Ora(StackRelative()); break;
+            case 0x04: Tsb(Direct()); break;
             case 0x05: Ora(Direct()); break;
             case 0x06: Asl(Direct()); break;
             case 0x07: Ora(DirectIndirectLong()); break;
@@ -15,12 +16,14 @@ public partial class Processor
             case 0x09: Ora(ImmediateM()); break;
             case 0x0A: AslA(Implied()); break;
             case 0x0B: Phd(Implied()); break;
+            case 0x0C: Tsb(Absolute()); break;
             case 0x0D: Ora(Absolute()); break;
             case 0x0E: Asl(Absolute()); break;
             case 0x0F: Ora(AbsoluteLong()); break;
             case 0x11: Ora(DirectIndirectY()); break;
             case 0x12: Ora(DirectIndirect()); break;
             case 0x13: Ora(StackRelativeIndirectY()); break;
+            case 0x14: Trb(Direct()); break;
             case 0x15: Ora(DirectX()); break;
             case 0x16: Asl(DirectX()); break;
             case 0x17: Ora(DirectIndirectLongY()); break;
@@ -28,6 +31,7 @@ public partial class Processor
             case 0x19: Ora(AbsoluteY()); break;
             case 0x1A: IncA(Implied()); break;
             case 0x1B: Tcs(Implied()); break;
+            case 0x1C: Trb(Absolute()); break;
             case 0x1D: Ora(AbsoluteX()); break;
             case 0x1E: Asl(AbsoluteX(true)); break;
             case 0x1F: Ora(AbsoluteLongX()); break;
