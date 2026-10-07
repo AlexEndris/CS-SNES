@@ -162,4 +162,14 @@ public partial class Processor
         
         return WithinBank(address);
     }
+    
+    private Operand Relative8()
+    {
+        return Immediate8();
+    }
+    
+    private Operand Relative16()
+    {
+        return Immediate16();
+    }
 }
