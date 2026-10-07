@@ -53,6 +53,13 @@ public partial class Processor(ICpuBus cpuBus)
         uint highAddress = CalculateAddressWithWrapMask(operand, 1);
         cpuBus.Write(highAddress, (byte)(value >> 8));
     }
+    
+    private void WriteWordRmw(Operand operand, ushort value)
+    {
+        uint highAddress = CalculateAddressWithWrapMask(operand, 1);
+        cpuBus.Write(highAddress, (byte)(value >> 8));
+        cpuBus.Write(operand.Address, (byte)value);
+    }
 
     private byte FetchByte()
     {

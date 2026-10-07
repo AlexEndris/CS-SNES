@@ -8,6 +8,7 @@ public partial class Processor
         {
             byte data = ReadByte(operand);
             data += 1;
+            cpuBus.Idle();
             WriteByte(operand, data);
             SetZeroNegativeFlags(data);
         }
@@ -15,7 +16,8 @@ public partial class Processor
         {
             ushort data = ReadWord(operand);
             data += 1;
-            WriteWord(operand, data);
+            cpuBus.Idle();
+            WriteWordRmw(operand, data);
             SetZeroNegativeFlags(data);
         }
     }
@@ -61,6 +63,26 @@ public partial class Processor
             SetZeroNegativeFlags(Registers.Y);
         }
     }    
+    
+    private void Dec(Operand operand)
+    {
+        if (Registers.M8)
+        {
+            byte data = ReadByte(operand);
+            data -= 1;
+            cpuBus.Idle();
+            WriteByte(operand, data);
+            SetZeroNegativeFlags(data);
+        }
+        else
+        {
+            ushort data = ReadWord(operand);
+            data -= 1;
+            cpuBus.Idle();
+            WriteWordRmw(operand, data);
+            SetZeroNegativeFlags(data);
+        }
+    }
     
     private void DecA(Operand _)
     {
