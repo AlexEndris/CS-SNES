@@ -116,9 +116,7 @@ public partial class Processor
         
         cpuBus.Idle();
         
-        var pointerOperand = Registers is { EmulationMode: true, DL: 0 } ? WithinPage(directAddress) : WithinBank(directAddress);
-
-        uint address = (uint)((Registers.Dbr << 16) | ReadWord(pointerOperand));
+        uint address = (uint)((Registers.Dbr << 16) | ReadWord(WithinBank(directAddress)));
 
         return CrossBank(address);
     }
