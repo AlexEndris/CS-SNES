@@ -13,11 +13,16 @@ public class InstructionTests
             .Select(f => Path.GetFileNameWithoutExtension(f)).Order())
         : throw new DirectoryNotFoundException(DataDirectory);
 
-    private TestProcessor Processor { get; }
+    private TestProcessor Processor { get; set; }
 
-    private TestCpuBus CpuBus { get; }
+    private TestCpuBus CpuBus { get; set; }
 
     public InstructionTests()
+    {
+        Reset();
+    }
+
+    private void Reset()
     {
         CpuBus = new TestCpuBus();
         Processor = new TestProcessor(CpuBus);
@@ -32,6 +37,7 @@ public class InstructionTests
         {
             try
             {
+                Reset();
                 TestInstruction(test);
             }
             catch (NotImplementedException ex)
