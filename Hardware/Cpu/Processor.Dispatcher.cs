@@ -207,6 +207,7 @@ public partial class Processor
             case 0xC8: Iny(Implied()); break;
             case 0xC9: Cmp(ImmediateM()); break;
             case 0xCA: Dex(Implied()); break;
+            case 0xCB: Wai(); break;
             case 0xCC: Cpy(Absolute()); break;
             case 0xCD: Cmp(Absolute()); break;
             case 0xCE: Dec(Absolute()); break;
@@ -222,6 +223,7 @@ public partial class Processor
             case 0xD8: Cld(Implied()); break;
             case 0xD9: Cmp(AbsoluteY()); break;
             case 0xDA: Phx(Implied()); break;
+            case 0xDB: Stp(); break;
             case 0xDC: Jml(AbsoluteIndirectLong()); break;
             case 0xDD: Cmp(AbsoluteX()); break;
             case 0xDE: Dec(AbsoluteX(true)); break;
