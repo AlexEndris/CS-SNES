@@ -13,9 +13,9 @@ public class InstructionTests
             .Select(f => Path.GetFileNameWithoutExtension(f)).Order())
         : throw new DirectoryNotFoundException(DataDirectory);
 
-    private TestProcessor Processor { get; set; }
+    private TestProcessor Processor { get; set; } = null!;
 
-    private TestCpuBus CpuBus { get; set; }
+    private TestCpuBus CpuBus { get; set; } = null!;
 
     public InstructionTests()
     {
