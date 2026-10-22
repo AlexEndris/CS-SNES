@@ -6,7 +6,9 @@ public partial class Processor
     {
         switch (opcode)
         {
+            case 0x00: Brk(); break;
             case 0x01: Ora(DirectIndexedIndirect()); break;
+            case 0x02: Cop(); break;
             case 0x03: Ora(StackRelative()); break;
             case 0x04: Tsb(Direct()); break;
             case 0x05: Ora(Direct()); break;
@@ -68,6 +70,7 @@ public partial class Processor
             case 0x3D: And(AbsoluteX()); break;
             case 0x3E: Rol(AbsoluteX(true)); break;
             case 0x3F: And(AbsoluteLongX()); break;
+            case 0x40: Rti(); break;
             case 0x41: Eor(DirectIndexedIndirect()); break;
             case 0x42: Wdm(Immediate8()); break;
             case 0x43: Eor(StackRelative()); break;
