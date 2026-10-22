@@ -202,6 +202,7 @@ public partial class Processor
             case 0xC6: Dec(Direct()); break;
             case 0xC7: Cmp(DirectIndirectLong()); break;
             case 0xC8: Iny(Implied()); break;
+            case 0xC9: Cmp(ImmediateM()); break;
             case 0xCA: Dex(Implied()); break;
             case 0xCC: Cpy(Absolute()); break;
             case 0xCD: Cmp(Absolute()); break;
