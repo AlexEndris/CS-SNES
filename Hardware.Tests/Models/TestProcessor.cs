@@ -10,7 +10,6 @@ public class TestProcessor(ICpuBus cpuBus) : Processor(cpuBus)
     public void SetState(CpuState state)
     {
         Registers = state;
-        State = RunState.Running;
     }
 
     public void AssertState(string name, CpuState state)
