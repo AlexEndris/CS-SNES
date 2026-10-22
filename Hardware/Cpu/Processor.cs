@@ -4,10 +4,36 @@ public partial class Processor(ICpuBus cpuBus)
 {
     public Registers Registers { get; protected set; } = new Registers();
     
+    public RunState State { get; protected set; } = RunState.Running;
+    
+    public bool Irq { get; set; }
+    public bool Nmi { get; set; }
+    
     public byte Cycle { get; private set; }
 
     public void Tick()
     {
+        if (State == RunState.Waiting)
+        {
+            if (Irq || Nmi)
+            {
+                State = RunState.Running;
+            }
+            else
+            {
+                cpuBus.Idle();
+                return;
+            }
+        }
+
+        if (State == RunState.Stopped)
+        {
+            cpuBus.Idle();
+            return;
+        }    
+        
+        // TODO: Interrupts
+        
         byte opcode = FetchByte();
         Execute(opcode);
     }

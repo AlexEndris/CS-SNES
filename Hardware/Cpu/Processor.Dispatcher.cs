@@ -6,7 +6,9 @@ public partial class Processor
     {
         switch (opcode)
         {
+            case 0x00: Brk(); break;
             case 0x01: Ora(DirectIndexedIndirect()); break;
+            case 0x02: Cop(); break;
             case 0x03: Ora(StackRelative()); break;
             case 0x04: Tsb(Direct()); break;
             case 0x05: Ora(Direct()); break;
@@ -68,6 +70,7 @@ public partial class Processor
             case 0x3D: And(AbsoluteX()); break;
             case 0x3E: Rol(AbsoluteX(true)); break;
             case 0x3F: And(AbsoluteLongX()); break;
+            case 0x40: Rti(); break;
             case 0x41: Eor(DirectIndexedIndirect()); break;
             case 0x42: Wdm(Immediate8()); break;
             case 0x43: Eor(StackRelative()); break;
@@ -204,6 +207,7 @@ public partial class Processor
             case 0xC8: Iny(Implied()); break;
             case 0xC9: Cmp(ImmediateM()); break;
             case 0xCA: Dex(Implied()); break;
+            case 0xCB: Wai(); break;
             case 0xCC: Cpy(Absolute()); break;
             case 0xCD: Cmp(Absolute()); break;
             case 0xCE: Dec(Absolute()); break;
@@ -219,6 +223,7 @@ public partial class Processor
             case 0xD8: Cld(Implied()); break;
             case 0xD9: Cmp(AbsoluteY()); break;
             case 0xDA: Phx(Implied()); break;
+            case 0xDB: Stp(); break;
             case 0xDC: Jml(AbsoluteIndirectLong()); break;
             case 0xDD: Cmp(AbsoluteX()); break;
             case 0xDE: Dec(AbsoluteX(true)); break;

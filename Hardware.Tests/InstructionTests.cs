@@ -13,11 +13,16 @@ public class InstructionTests
             .Select(f => Path.GetFileNameWithoutExtension(f)).Order())
         : throw new DirectoryNotFoundException(DataDirectory);
 
-    private TestProcessor Processor { get; }
+    private TestProcessor Processor { get; set; } = null!;
 
-    private TestCpuBus CpuBus { get; }
+    private TestCpuBus CpuBus { get; set; } = null!;
 
     public InstructionTests()
+    {
+        Reset();
+    }
+
+    private void Reset()
     {
         CpuBus = new TestCpuBus();
         Processor = new TestProcessor(CpuBus);
@@ -32,6 +37,7 @@ public class InstructionTests
         {
             try
             {
+                Reset();
                 TestInstruction(test);
             }
             catch (NotImplementedException ex)
@@ -52,7 +58,7 @@ public class InstructionTests
         }
     }
     
-    [Theory(Explicit = true), InlineData("69", "e", 6)]
+    [Theory(), InlineData("00", "e", 233)]
     public async Task SingleCase(string instruction, string mode, int caseNumber)
     {
         var test = await ReadTestData($"{instruction}.{mode}")

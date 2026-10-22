@@ -153,6 +153,12 @@ public partial class Processor
         cpuBus.Write(Registers.S--, value);
     }
 
+    private void PushWrapping(ushort value)
+    {
+        Push((byte)(value >> 8));
+        Push((byte)value);
+    }
+    
     private ushort PullWord()
     {
         var pointer = Registers.S;
@@ -161,6 +167,14 @@ public partial class Processor
         pointer++;
         byte high = cpuBus.Read(pointer);
         Registers.S = pointer;
+        
+        return (ushort)(high << 8 | low);
+    }
+    
+    private ushort PullWordWrapping()
+    {
+        byte low = PullByteWrapping();
+        byte high = PullByteWrapping();
         
         return (ushort)(high << 8 | low);
     }
