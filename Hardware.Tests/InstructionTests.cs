@@ -1,6 +1,7 @@
 ﻿namespace Hardware.Tests;
 
 using AwesomeAssertions;
+using AwesomeAssertions.Execution;
 
 using Models;
 
@@ -58,7 +59,7 @@ public class InstructionTests
         }
     }
     
-    [Theory(), InlineData("00", "e", 233)]
+    [Theory(), InlineData("54", "e", 1)]
     public async Task SingleCase(string instruction, string mode, int caseNumber)
     {
         var test = await ReadTestData($"{instruction}.{mode}")
@@ -76,15 +77,18 @@ public class InstructionTests
             
         SetupCpu(test.Initial);
 
-        var cycles = 0;
-        do
+        int expected = test.Cycles.Length;
+        var steps = 0;
+        while (CpuBus.Log.Count < expected)
         {
             Processor.Tick();
-            if (Processor.Cycle > 100)
+            
+            steps++;
+            if (steps > expected)
             {
                 Assert.Fail($"Instruction never completed for {test.Name}");
             }
-        } while (Processor.Cycle != 0);
+        }
 
         AssertCpu(test.Name, test.Final, test.Cycles);
     }
@@ -98,8 +102,11 @@ public class InstructionTests
 
     private void AssertCpu(string name, CpuState state, Cycle[] cycles)
     {
-        Processor.AssertState(name, state);
-        CpuBus.AssertRam(name, state.Ram);
-        CpuBus.AssertCycles(name, cycles);
+        using (new AssertionScope(name))
+        {
+            Processor.AssertState(name, state);
+            CpuBus.AssertRam(name, state.Ram);
+            CpuBus.AssertCycles(name, cycles);
+        }
     }
 }
