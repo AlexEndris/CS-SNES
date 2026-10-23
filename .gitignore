@@ -30,6 +30,7 @@ artifacts/
 
 .idea
 *.DotSettings.user
+*.DotSettings
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
