@@ -46,9 +46,12 @@ public partial class Processor
         byte lowPointerByte = FetchByte();
         
         ushort pcAddress = Registers.PC;
-        cpuBus.Write(Registers.S--, (byte)(pcAddress >> 8));
-        cpuBus.Write(Registers.S--, (byte)pcAddress);
         
+        ushort stackPointer = Registers.S;
+        cpuBus.Write(stackPointer--, (byte)(pcAddress >> 8));
+        cpuBus.Write(stackPointer--, (byte)pcAddress);
+        Registers.S = stackPointer;
+            
         ushort basePointer = (ushort)(FetchByte() << 8 | lowPointerByte);
         ushort pointer = (ushort)((basePointer + Registers.X) & 0xFFFF);
         uint pointerAddress = (uint)((Registers.Pbr << 16) | pointer);

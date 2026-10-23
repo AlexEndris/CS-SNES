@@ -74,6 +74,7 @@ public partial class Processor
             case 0x41: Eor(DirectIndexedIndirect()); break;
             case 0x42: Wdm(Immediate8()); break;
             case 0x43: Eor(StackRelative()); break;
+            case 0x44: Mvp(); break;
             case 0x45: Eor(Direct()); break;
             case 0x46: Lsr(Direct()); break;
             case 0x47: Eor(DirectIndirectLong()); break;
@@ -89,6 +90,7 @@ public partial class Processor
             case 0x51: Eor(DirectIndirectY()); break;
             case 0x52: Eor(DirectIndirect()); break;
             case 0x53: Eor(StackRelativeIndirectY()); break;
+            case 0x54: Mvn(); break;
             case 0x55: Eor(DirectX()); break;
             case 0x56: Lsr(DirectX()); break;
             case 0x57: Eor(DirectIndirectLongY()); break;
