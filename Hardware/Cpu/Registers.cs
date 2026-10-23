@@ -5,8 +5,8 @@ public record Registers
     private byte p;
     public byte P { get => p; set => SetP(value); }
     public ushort A { get; set; }
-    public ushort X { get; set; }
-    public ushort Y { get; set; }
+    public ushort X { get; set => field = (ushort)(X8 ? (value & 0xFF) : value); }
+    public ushort Y { get; set => field = (ushort)(X8 ? (value & 0xFF) : value); }
     public ushort S { get; set => field = EmulationMode ? (ushort)((value & 0xFF) | 0x0100) : value; }
     public ushort D { get; set; }
 

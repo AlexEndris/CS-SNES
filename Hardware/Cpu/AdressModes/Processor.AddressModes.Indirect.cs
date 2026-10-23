@@ -116,9 +116,20 @@ public partial class Processor
         
         cpuBus.Idle();
         
-        uint address = (uint)((Registers.Dbr << 16) | ReadWord(WithinBank(directAddress)));
-
-        return CrossBank(address);
+        if (Registers is
+            {
+                EmulationMode: true,
+                DL: 0
+            })
+        {
+            uint address = (uint)((Registers.Dbr << 16) | ReadWord(WithinPage(directAddress)));
+            return CrossBank(address);
+        }
+        else
+        {
+            uint address = (uint)((Registers.Dbr << 16) | ReadWord(WithinBank(directAddress)));
+            return CrossBank(address);
+        }
     }
     
     private Operand StackRelativeIndirectY()
