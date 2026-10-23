@@ -1,3 +1,6 @@
 [submodule "tests/SingleStepTests/65618"]
 	path = tests/SingleStepTests/65618
 	url = https://github.com/SingleStepTests/65816.git
+[submodule "tests/SingleStepTests/spc700"]
+	path = tests/SingleStepTests/spc700
+	url = https://github.com/SingleStepTests/spc700.git
