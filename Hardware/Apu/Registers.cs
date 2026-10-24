@@ -5,8 +5,16 @@ public record Registers
     public byte A { get; set; }
     public byte X { get; set; }
     public byte Y { get; set; }
-    public ushort YA { get => (ushort)(Y << 8 | A); }
-    
+    public ushort YA
+    {
+        get => (ushort)(Y << 8 | A);
+        set
+        {
+            Y = (byte)(value >> 8);
+            A = (byte)value;
+        }
+    }
+
     public ushort PC { get; set; }
     public byte SP { get; set; }
     

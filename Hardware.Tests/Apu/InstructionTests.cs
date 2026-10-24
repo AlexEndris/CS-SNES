@@ -48,10 +48,10 @@ public class InstructionTests
         }
     }
 
-    [Theory(Explicit = true), InlineData("a9", "e")]
-    public async Task Instruction(string instruction, string mode)
+    [Theory(Explicit = true), InlineData("a9")]
+    public async Task Instruction(string instruction)
     {
-        var testCases = ReadTestData<InstructionTestData>(DataDirectorySpc700,$"{instruction}.{mode}");
+        var testCases = ReadTestData<InstructionTestData>(DataDirectorySpc700,$"{instruction}");
         
         await foreach (var test in testCases)
         {
@@ -59,11 +59,11 @@ public class InstructionTests
         }
     }
     
-    [Theory(), InlineData("54", "e", 1)]
-    public async Task SingleCase(string instruction, string mode, int caseNumber)
+    [Theory(), InlineData("00", 1)]
+    public async Task SingleCase(string instruction, int caseNumber)
     {
-        var test = await ReadTestData<InstructionTestData>(DataDirectorySpc700, $"{instruction}.{mode}")
-            .FirstAsync(t => t!.Name == $"{instruction} {mode} {caseNumber}");
+        var test = await ReadTestData<InstructionTestData>(DataDirectorySpc700, $"{instruction}")
+            .FirstAsync(t => t!.Name == $"{instruction} {caseNumber}");
 
         TestInstruction(test);
     }
@@ -75,28 +75,33 @@ public class InstructionTests
             test.Should().NotBeNull();
         }
             
-        SetupCpu(test.Initial);
+        SetupCpu(test.Initial, test.Cycles);
 
         int expected = test.Cycles.Length;
         var steps = 0;
-        while (ApuBus.Log.Count < expected)
+
+        using (new AssertionScope(test.Name))
         {
-            Processor.Tick();
-            
-            steps++;
-            if (steps > expected)
+            while (ApuBus.Log.Count < expected)
             {
-                Assert.Fail($"Instruction never completed for {test.Name}");
+                Processor.Tick();
+
+                steps++;
+                if (steps > expected)
+                {
+                    break;
+                }
             }
         }
 
         AssertCpu(test.Name, test.Final, test.Cycles);
     }
 
-    private void SetupCpu(ApuState state)
+    private void SetupCpu(ApuState state, Cycle[] cycles)
     {
         ApuBus.ResetBus();
         ApuBus.SetRam(state.Ram);
+        ApuBus.ExpectedReads = cycles.Where(c => c.Outputs == "read").Select(x => $"${x.Address:X4}").ToList();
         Processor.SetState(state);
     }
 

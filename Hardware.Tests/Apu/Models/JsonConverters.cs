@@ -11,7 +11,7 @@ public class RamEntryConverters : JsonConverter<RamEntry>
             throw new JsonException("Expected [address, value] array.");
 
         reader.Read();
-        var address = reader.GetUInt32();
+        var address = reader.GetUInt16();
         reader.Read();
         var value = reader.GetByte();
         reader.Read();
@@ -35,7 +35,7 @@ public class CycleConverter : JsonConverter<Cycle>
             throw new JsonException("Expected [address, value, outputs] array.");
 
         reader.Read();
-        uint? address = reader.TokenType == JsonTokenType.Null ? null : reader.GetUInt32();
+        ushort? address = reader.TokenType == JsonTokenType.Null ? null : reader.GetUInt16();
         reader.Read();
         byte? value = reader.TokenType == JsonTokenType.Null ? null : reader.GetByte();
         reader.Read();

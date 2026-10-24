@@ -9,7 +9,9 @@ public class TestApuBus : IApuBus
 {
     public Dictionary<string, byte> Ram = new();
     public List<BusLogEntry> Log = new();
-
+    public List<string> ExpectedReads { get; set; }
+    
+    
     public void ResetBus()
     {
         Ram.Clear();
@@ -20,7 +22,7 @@ public class TestApuBus : IApuBus
     {
         foreach (RamEntry ramEntry in entries)
         {
-            Ram[$"${ramEntry.Address:X6}"] = ramEntry.Value;
+            Ram[$"${ramEntry.Address:X4}"] = ramEntry.Value;
         }
     }
 
@@ -30,12 +32,12 @@ public class TestApuBus : IApuBus
         {
             foreach (RamEntry entry in entries)
             {
-                Ram.Should().ContainKey($"${entry.Address:X6}", "RAM ${0:X6} should exist", entry.Address)
-                    .WhoseValue.Should().Be(entry.Value, "RAM ${0:X6}", entry.Address);
+                Ram.Should().ContainKey($"${entry.Address:X4}", "RAM ${0:X4} should exist", entry.Address)
+                    .WhoseValue.Should().Be(entry.Value, "RAM ${0:X4}", entry.Address);
             }
 
             
-            var expected = entries.Select(e => $"${e.Address:X6}").ToHashSet();
+            var expected = entries.Select(e => $"${e.Address:X4}").ToHashSet();
             var unexpected = Ram.Keys.Where(a => !expected.Contains(a));
             unexpected.Should().BeEmpty("the bus holds addresses the test doesn't expect");
         }
@@ -53,19 +55,23 @@ public class TestApuBus : IApuBus
             }
         }
     }
-    
+
     public byte Read(ushort address)
     {
-        try
+        if (Ram.TryGetValue($"${address:X4}", out byte value))
         {
-            byte value = Ram[$"${address:X6}"];
-            Log.Add(new (){Address = address, Value = value, Kind = "read"});      
+            Log.Add(new() { Address = address, Value = value, Kind = "read" });
             return value;
         }
-        catch (Exception e)
+
+        if (ExpectedReads.Contains($"${address:X4}"))
         {
-            throw new KeyNotFoundException($"{e.Message}\r\nExisting Keys: [{string.Join(", ",Ram.Keys)}]",e);
+            Log.Add(new() { Address = address, Value = null, Kind = "read" });
+            return 0;
         }
+
+        AssertionChain.GetOrCreate().FailWith($"{{context}}: ${address:X4} not found.\r\nExisting Keys: [{string.Join(", ", Ram.Keys)}]");
+        return 0;
     }
 
     public void Write(ushort address, byte value)
@@ -74,31 +80,20 @@ public class TestApuBus : IApuBus
         Log.Add(new (){Address = address, Value = value, Kind = "write"});        
     }
 
-    public void Idle()
+    public void Wait()
     {
-        Log.Add(new (){Kind = "idle"});       
+        Log.Add(new (){Kind = "wait"});       
     }
     
-    private static string FormatCycle(Cycle c) => KindOf(c) switch
+    private static string FormatCycle(Cycle c) => c.Outputs switch
     {
-        "idle" => "idle",
-        var k  => $"{k,-5} ${c.Address:X6} {c.Value:X2}",
+        "wait" => "wait",
+        var k  => $"{k,-5} ${c.Address:X4} {c.Value:X2}",
     };
 
     private static string FormatLog(BusLogEntry e) => e.Kind switch
     {
-        "idle" => "idle",
-        var k  => $"{k,-5} ${e.Address:X6} {e.Value:X2}",
+        "wait" => "wait",
+        var k  => $"{k,-5} ${e.Address:X4} {e.Value:X2}",
     };
-    
-    private static string KindOf(Cycle c)
-    {
-        var f = c.Outputs;
-        bool valid = f[0] == 'd' || f[1] == 'p' || f[2] == 'v';
-
-        if (!valid)
-            return "idle";
-
-        return f[3] == 'w' ? "write" : "read";
-    }
 }

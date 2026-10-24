@@ -24,6 +24,7 @@ public class ApuState
             X = state.X,
             Y = state.Y,
             PC = state.PC,
+            Psw = state.Psw,
         };
     }
 }

@@ -6,5 +6,5 @@ public interface IApuBus
 
     void Write(ushort address, byte value);
 
-    void Idle();
+    void Wait();
 }

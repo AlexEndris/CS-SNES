@@ -6,6 +6,7 @@ public partial class Processor
     {
         switch (opcode)
         {
+            case 0x00: Nop(); break; 
             default:
                 throw new NotImplementedException($"Opcode ${opcode:X2}");
         }
