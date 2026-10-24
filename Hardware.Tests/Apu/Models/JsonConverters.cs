@@ -1,4 +1,4 @@
-﻿namespace Hardware.Tests.Models;
+﻿namespace Hardware.Tests.Apu.Models;
 
 using System.Text.Json;
 using System.Text.Json.Serialization;

@@ -1,4 +1,4 @@
-﻿namespace Hardware.Tests.Models;
+﻿namespace Hardware.Tests.Apu.Models;
 
 public struct BusLogEntry
 {

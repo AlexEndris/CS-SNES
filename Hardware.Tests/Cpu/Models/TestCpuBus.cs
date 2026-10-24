@@ -1,9 +1,9 @@
-﻿namespace Hardware.Tests.Models;
+﻿namespace Hardware.Tests.Cpu.Models;
 
 using AwesomeAssertions;
 using AwesomeAssertions.Execution;
 
-using Cpu;
+using Hardware.Cpu;
 
 public class TestCpuBus : ICpuBus
 {

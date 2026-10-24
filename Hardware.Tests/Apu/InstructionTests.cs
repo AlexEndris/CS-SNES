@@ -1,4 +1,4 @@
-﻿namespace Hardware.Tests;
+﻿namespace Hardware.Tests.Apu;
 
 using AwesomeAssertions;
 using AwesomeAssertions.Execution;
@@ -9,14 +9,14 @@ using static TestDataHelper;
 
 public class InstructionTests
 {
-    public static TheoryData<string> TestFiles => Directory.Exists(DataDirectory)
-        ? new (Directory.GetFiles(DataDirectory, "*.json")
+    public static TheoryData<string> TestFiles => Directory.Exists(DataDirectorySpc700)
+        ? new (Directory.GetFiles(DataDirectorySpc700, "*.json")
             .Select(f => Path.GetFileNameWithoutExtension(f)).Order())
-        : throw new DirectoryNotFoundException(DataDirectory);
+        : throw new DirectoryNotFoundException(DataDirectorySpc700);
 
     private TestProcessor Processor { get; set; } = null!;
 
-    private TestCpuBus CpuBus { get; set; } = null!;
+    private TestApuBus ApuBus { get; set; } = null!;
 
     public InstructionTests()
     {
@@ -25,14 +25,14 @@ public class InstructionTests
 
     private void Reset()
     {
-        CpuBus = new TestCpuBus();
-        Processor = new TestProcessor(CpuBus);
+        ApuBus = new TestApuBus();
+        Processor = new TestProcessor(ApuBus);
     }
 
     [Theory, MemberData(nameof(TestFiles))]
     public async Task AllInstructions(string filename)
     {
-        var testCases = ReadTestData(filename);
+        var testCases = ReadTestData<InstructionTestData>(DataDirectorySpc700, filename);
             
         await foreach (var test in testCases)
         {
@@ -51,7 +51,7 @@ public class InstructionTests
     [Theory(Explicit = true), InlineData("a9", "e")]
     public async Task Instruction(string instruction, string mode)
     {
-        var testCases = ReadTestData($"{instruction}.{mode}");
+        var testCases = ReadTestData<InstructionTestData>(DataDirectorySpc700,$"{instruction}.{mode}");
         
         await foreach (var test in testCases)
         {
@@ -62,7 +62,7 @@ public class InstructionTests
     [Theory(), InlineData("54", "e", 1)]
     public async Task SingleCase(string instruction, string mode, int caseNumber)
     {
-        var test = await ReadTestData($"{instruction}.{mode}")
+        var test = await ReadTestData<InstructionTestData>(DataDirectorySpc700, $"{instruction}.{mode}")
             .FirstAsync(t => t!.Name == $"{instruction} {mode} {caseNumber}");
 
         TestInstruction(test);
@@ -79,7 +79,7 @@ public class InstructionTests
 
         int expected = test.Cycles.Length;
         var steps = 0;
-        while (CpuBus.Log.Count < expected)
+        while (ApuBus.Log.Count < expected)
         {
             Processor.Tick();
             
@@ -93,20 +93,20 @@ public class InstructionTests
         AssertCpu(test.Name, test.Final, test.Cycles);
     }
 
-    private void SetupCpu(CpuState state)
+    private void SetupCpu(ApuState state)
     {
-        CpuBus.ResetBus();
-        CpuBus.SetRam(state.Ram);
+        ApuBus.ResetBus();
+        ApuBus.SetRam(state.Ram);
         Processor.SetState(state);
     }
 
-    private void AssertCpu(string name, CpuState state, Cycle[] cycles)
+    private void AssertCpu(string name, ApuState state, Cycle[] cycles)
     {
         using (new AssertionScope(name))
         {
             Processor.AssertState(name, state);
-            CpuBus.AssertRam(name, state.Ram);
-            CpuBus.AssertCycles(name, cycles);
+            ApuBus.AssertRam(name, state.Ram);
+            ApuBus.AssertCycles(name, cycles);
         }
     }
 }

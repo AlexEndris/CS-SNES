@@ -1,8 +1,8 @@
-﻿namespace Hardware.Tests.Models;
+﻿namespace Hardware.Tests.Cpu.Models;
 
 using System.Text.Json.Serialization;
 
-using Cpu;
+using Hardware.Cpu;
 
 public class CpuState
 {

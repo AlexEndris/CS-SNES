@@ -1,4 +1,4 @@
-﻿namespace Hardware.Tests.Models;
+﻿namespace Hardware.Tests.Cpu.Models;
 
 public class InstructionTestData
 {
