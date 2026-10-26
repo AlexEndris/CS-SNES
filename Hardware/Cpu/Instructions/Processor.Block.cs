@@ -28,8 +28,8 @@ public partial class Processor
         Registers.Dbr = destinationBank;
         WriteByte(Operand.WithinBank(destination), data);
 
-        cpuBus.Idle();
-        cpuBus.Idle();
+        Idle();
+        Idle();
         
         Registers.X = (ushort)(Registers.X + step);
         Registers.Y = (ushort)(Registers.Y + step);

@@ -25,7 +25,7 @@ public partial class Processor
             byte data = ReadByte(operand);
             Registers.Carry = (data & 0x80) > 0;
             data <<= 1;
-            cpuBus.Idle();
+            Idle();
             WriteByte(operand, data);
             SetZeroNegativeFlags(data);
         }
@@ -34,12 +34,12 @@ public partial class Processor
             ushort data = ReadWord(operand);
             Registers.Carry = (data & 0x8000) > 0;
             data <<= 1;
-            cpuBus.Idle();
+            Idle();
             WriteWordRmw(operand, data);
             SetZeroNegativeFlags(data);
         }
     }
-    
+
     private void LsrA(Operand _)
     {
         if (Registers.M8)
@@ -63,7 +63,7 @@ public partial class Processor
             byte data = ReadByte(operand);
             Registers.Carry = (data & 0x1) > 0;
             data >>= 1;
-            cpuBus.Idle();
+            Idle();
             WriteByte(operand, data);
             SetZeroNegativeFlags(data);
         }
@@ -72,7 +72,7 @@ public partial class Processor
             ushort data = ReadWord(operand);
             Registers.Carry = (data & 0x1) > 0;
             data >>= 1;
-            cpuBus.Idle();
+            Idle();
             WriteWordRmw(operand, data);
             SetZeroNegativeFlags(data);
         }

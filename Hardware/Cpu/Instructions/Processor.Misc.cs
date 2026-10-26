@@ -9,6 +9,6 @@ public partial class Processor
     
     private void Wdm(Operand _)
     {
-        cpuBus.Idle();
+        Idle();
     }
 }

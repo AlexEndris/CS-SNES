@@ -8,7 +8,7 @@ public partial class Processor
         {
             byte data = ReadByte(operand);
             data += 1;
-            cpuBus.Idle();
+            Idle();
             WriteByte(operand, data);
             SetZeroNegativeFlags(data);
         }
@@ -16,7 +16,7 @@ public partial class Processor
         {
             ushort data = ReadWord(operand);
             data += 1;
-            cpuBus.Idle();
+            Idle();
             WriteWordRmw(operand, data);
             SetZeroNegativeFlags(data);
         }
@@ -70,7 +70,7 @@ public partial class Processor
         {
             byte data = ReadByte(operand);
             data -= 1;
-            cpuBus.Idle();
+            Idle();
             WriteByte(operand, data);
             SetZeroNegativeFlags(data);
         }
@@ -78,7 +78,7 @@ public partial class Processor
         {
             ushort data = ReadWord(operand);
             data -= 1;
-            cpuBus.Idle();
+            Idle();
             WriteWordRmw(operand, data);
             SetZeroNegativeFlags(data);
         }

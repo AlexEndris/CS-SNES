@@ -20,7 +20,7 @@ public partial class Processor
         ushort stackPointer = Registers.S;
         
         cpuBus.Write(stackPointer--, Registers.Pbr);
-        cpuBus.Idle();
+        Idle();
         Registers.Pbr = FetchByte();
 
         ushort pcAddress = (ushort)(Registers.PC - 1);
@@ -33,7 +33,7 @@ public partial class Processor
 
     private void Jsr(Operand operand)
     {
-        cpuBus.Idle();
+        Idle();
         ushort pcAddress = (ushort)(Registers.PC - 1);
         cpuBus.Write(Registers.S--, (byte)(pcAddress >> 8));
         cpuBus.Write(Registers.S--, (byte)pcAddress);
@@ -56,7 +56,7 @@ public partial class Processor
         ushort pointer = (ushort)((basePointer + Registers.X) & 0xFFFF);
         uint pointerAddress = (uint)((Registers.Pbr << 16) | pointer);
         
-        cpuBus.Idle();
+        Idle();
         
         ushort address = ReadWord(WithinBank(pointerAddress));
 
@@ -67,7 +67,7 @@ public partial class Processor
     {
         ushort stackPointer = Registers.S;
 
-        cpuBus.Idle();
+        Idle();
         stackPointer++;
         byte lowByte = cpuBus.Read(stackPointer);
         stackPointer++;
@@ -84,13 +84,13 @@ public partial class Processor
 
     private void Rts(Operand _)
     {
-        cpuBus.Idle();
+        Idle();
         Registers.S++;
         byte lowByte = cpuBus.Read(Registers.S);
         Registers.S++;
         byte highByte = cpuBus.Read(Registers.S);
         
-        cpuBus.Idle();
+        Idle();
         
         Registers.PC = (ushort)((highByte << 8) | lowByte);
         Registers.PC++;

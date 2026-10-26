@@ -21,4 +21,25 @@ public partial class Processor(IApuBus apuBus)
     {
         return apuBus.Read(operand.Address);
     }
+
+    private void DummyRead()
+    {
+        apuBus.Read(Registers.PC);
+    }
+    
+    private void SetZeroFlag(byte value)
+    {
+        Registers.Zero = value == 0;
+    }
+
+    private void SetNegativeFlag(byte value)
+    {
+        Registers.Negative = (value & 0x80) > 0;
+    }
+
+    private void SetZeroNegativeFlags(byte value)
+    {
+        SetZeroFlag(value);
+        SetNegativeFlag(value);
+    }
 }

@@ -6,7 +6,7 @@ public partial class Processor
 {
     private Operand Implied()
     {
-        cpuBus.Idle();
+        Idle();
         return Nothing;
     }
 
@@ -60,7 +60,7 @@ public partial class Processor
         if (baseAddress >> 8 != address >> 8
             || !Registers.X8
             || isWrite)
-            cpuBus.Idle();
+            Idle();
         
         return CrossBank(address);
     }
@@ -74,7 +74,7 @@ public partial class Processor
         if (baseAddress >> 8 != address >> 8
             || !Registers.X8
             || isWrite)
-            cpuBus.Idle();
+            Idle();
         
         return CrossBank(address);
     }
@@ -99,7 +99,7 @@ public partial class Processor
         uint address = (uint)((Registers.D + lowByte) & 0x00FFFF);
 
         if (Registers.DL > 0)
-            cpuBus.Idle();
+            Idle();
         
         return WithinBank(address);
     }
@@ -110,9 +110,9 @@ public partial class Processor
         uint directAddress = (uint)((Registers.D + lowByte) & 0x00FFFF);
 
         if (Registers.DL > 0)
-            cpuBus.Idle();
+            Idle();
 
-        cpuBus.Idle();
+        Idle();
 
         uint address = (directAddress + Registers.X) & 0x00FFFF;
 
@@ -134,9 +134,9 @@ public partial class Processor
         uint directAddress = (uint)((Registers.D + lowByte) & 0x00FFFF);
 
         if (Registers.DL > 0)
-            cpuBus.Idle();
+            Idle();
 
-        cpuBus.Idle();
+        Idle();
 
         uint address = (directAddress + Registers.Y) & 0x00FFFF;
 
@@ -158,7 +158,7 @@ public partial class Processor
 
         uint address = (uint)((Registers.S + offset) & 0x00FFFF);
 
-        cpuBus.Idle();
+        Idle();
         
         return WithinBank(address);
     }

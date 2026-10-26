@@ -7,6 +7,9 @@ public partial class Processor
         switch (opcode)
         {
             case 0x00: Nop(); break; 
+            case 0x7D: MovAX(); break;
+            case 0xDD: MovAY(); break;
+            case 0xE8: MovA(Immediate()); break;
             default:
                 throw new NotImplementedException($"Opcode ${opcode:X2}");
         }

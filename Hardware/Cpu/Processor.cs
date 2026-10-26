@@ -38,6 +38,11 @@ public partial class Processor(ICpuBus cpuBus)
         Execute(opcode);
     }
     
+    private void Idle()
+    {
+        cpuBus.Idle();
+    }
+    
     private byte ReadByte(Operand operand)
     {
         return cpuBus.Read(operand.Address);

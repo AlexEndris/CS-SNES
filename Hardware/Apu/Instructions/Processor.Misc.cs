@@ -7,6 +7,6 @@ public partial class Processor
     private void Nop()
     {
         // Dummy Read
-        ReadByte(CrossPage(Registers.PC));
+        DummyRead();
     }
 }

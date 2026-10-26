@@ -92,7 +92,7 @@ public partial class Processor
     {
         short offset = (short)ReadWord(operand);
         
-        cpuBus.Idle();
+        Idle();
         ushort result = (ushort)(Registers.PC + offset);
 
         Registers.PC = result;
@@ -100,13 +100,13 @@ public partial class Processor
     
     private void TakeBranch(sbyte offset)
     {
-        cpuBus.Idle();
+        Idle();
         ushort result = (ushort)(Registers.PC + offset);
 
         if (Registers.EmulationMode
             && (Registers.PC & 0xFF00) != (result & 0xFF00))
         {
-            cpuBus.Idle();
+            Idle();
         }
         
         Registers.PC = result;

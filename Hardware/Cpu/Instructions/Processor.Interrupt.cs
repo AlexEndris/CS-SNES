@@ -18,8 +18,8 @@ public partial class Processor
 
     private void Rti()
     {
-        cpuBus.Idle();
-        cpuBus.Idle();
+        Idle();
+        Idle();
         if (Registers.EmulationMode)
         {
             Registers.P = PullByteWrapping();
@@ -35,17 +35,17 @@ public partial class Processor
 
     private void Wai()
     {
-        cpuBus.Idle();
-        cpuBus.Idle();
-        cpuBus.Idle();
+        Idle();
+        Idle();
+        Idle();
         State = RunState.Waiting;
     }
 
     private void Stp()
     {
-        cpuBus.Idle();
-        cpuBus.Idle();
-        cpuBus.Idle();
+        Idle();
+        Idle();
+        Idle();
         State = RunState.Stopped;
     }
     

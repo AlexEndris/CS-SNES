@@ -28,7 +28,7 @@ public partial class Processor
             byte carry = (byte)(Registers.Carry ? 1 : 0);
             Registers.Carry = (data & 0x80) > 0;
             data = (byte)(data << 1 | carry);
-            cpuBus.Idle();
+            Idle();
             WriteByte(operand, data);
             SetZeroNegativeFlags(data);
         }
@@ -38,7 +38,7 @@ public partial class Processor
             ushort carry = (ushort)(Registers.Carry ? 1 : 0);
             Registers.Carry = (data & 0x8000) > 0;
             data = (ushort)(data << 1 | carry);
-            cpuBus.Idle();
+            Idle();
             WriteWordRmw(operand, data);
             SetZeroNegativeFlags(data);
         }
@@ -70,7 +70,7 @@ public partial class Processor
             byte carry = (byte)(Registers.Carry ? 0x80 : 0);
             Registers.Carry = (data & 0x1) > 0;
             data = (byte)(data >> 1 | carry);
-            cpuBus.Idle();
+            Idle();
             WriteByte(operand, data);
             SetZeroNegativeFlags(data);
         }
@@ -80,7 +80,7 @@ public partial class Processor
             ushort carry = (ushort)(Registers.Carry ? 0x8000 : 0);
             Registers.Carry = (data & 0x1) > 0;
             data = (ushort)(data >> 1 | carry);
-            cpuBus.Idle();
+            Idle();
             WriteWordRmw(operand, data);
             SetZeroNegativeFlags(data);
         }

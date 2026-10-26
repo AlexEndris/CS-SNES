@@ -28,7 +28,7 @@ public partial class Processor
         ushort pointer = (ushort)((basePointer + Registers.X) & 0xFFFF);
 
         uint pointerAddress = (uint)((Registers.Pbr << 16) | pointer);
-        cpuBus.Idle();
+        Idle();
         ushort address = ReadWord(WithinBank(pointerAddress));
 
         return CrossBank(address);
@@ -40,7 +40,7 @@ public partial class Processor
         uint directAddress = (uint)((Registers.D + lowByte) & 0x00FFFF);
 
         if ((Registers.DL) > 0)
-            cpuBus.Idle();
+            Idle();
 
         var pointerOperand = Registers is { EmulationMode: true, DL: 0 } ? WithinPage(directAddress) : WithinBank(directAddress);
         
@@ -55,7 +55,7 @@ public partial class Processor
         uint directAddress = (uint)((Registers.D + lowByte) & 0x00FFFF);
 
         if ((Registers.DL) > 0)
-            cpuBus.Idle();
+            Idle();
 
         uint address = ReadLong(WithinBank(directAddress));
 
@@ -68,7 +68,7 @@ public partial class Processor
         uint directAddress = (uint)((Registers.D + lowByte) & 0x00FFFF);
 
         if ((Registers.DL) > 0)
-            cpuBus.Idle();
+            Idle();
 
         var pointerOperand = Registers is { EmulationMode: true, DL: 0 } ? WithinPage(directAddress) : WithinBank(directAddress);
         
@@ -78,7 +78,7 @@ public partial class Processor
         if (baseAddress >> 8 != address >> 8
             || !Registers.X8
             || isWrite)
-            cpuBus.Idle();
+            Idle();
 
         return CrossBank(address);
     }
@@ -89,7 +89,7 @@ public partial class Processor
         uint directAddress = (uint)((Registers.D + lowByte) & 0x00FFFF);
 
         if ((Registers.DL) > 0)
-            cpuBus.Idle();
+            Idle();
 
         uint baseAddress = ReadLong(WithinBank(directAddress));
         uint address = (baseAddress + Registers.Y) & 0xFFFFFF;
@@ -112,9 +112,9 @@ public partial class Processor
         }
         
         if ((Registers.DL) > 0)
-            cpuBus.Idle();
+            Idle();
         
-        cpuBus.Idle();
+        Idle();
         
         if (Registers is
             {
@@ -138,11 +138,11 @@ public partial class Processor
 
         uint pointerAddress = (uint)((Registers.S + offset) & 0x00FFFF);
 
-        cpuBus.Idle();
+        Idle();
         
         uint baseAddress = (uint)((Registers.Dbr << 16) | ReadWord(WithinBank(pointerAddress)));
         
-        cpuBus.Idle();
+        Idle();
         
         uint address = (baseAddress + Registers.Y) & 0xFFFFFF;
          

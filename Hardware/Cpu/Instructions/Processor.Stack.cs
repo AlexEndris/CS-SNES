@@ -15,7 +15,7 @@ public partial class Processor
     private void Per(Operand operand)
     {
         ushort value = ReadWord(operand);
-        cpuBus.Idle();
+        Idle();
         Push((ushort)(Registers.PC + value));
     }
 
@@ -57,7 +57,7 @@ public partial class Processor
     
     private void Pla(Operand _)
     {
-        cpuBus.Idle();
+        Idle();
         if (Registers.M8)
         {
             Registers.A = (ushort)((Registers.A & 0xFF00) | PullByteWrapping());
@@ -72,7 +72,7 @@ public partial class Processor
     
     private void Plx(Operand _)
     {
-        cpuBus.Idle();
+        Idle();
         if (Registers.X8)
         {
             Registers.X = (ushort)((Registers.X & 0xFF00) | PullByteWrapping());
@@ -87,7 +87,7 @@ public partial class Processor
     
     private void Ply(Operand _)
     {
-        cpuBus.Idle();
+        Idle();
         if (Registers.X8)
         {
             Registers.Y = (ushort)((Registers.Y & 0xFF00) | PullByteWrapping());
@@ -122,21 +122,21 @@ public partial class Processor
     
     private void Plb(Operand _)
     {
-        cpuBus.Idle();
+        Idle();
         Registers.Dbr = PullByte();
         SetZeroNegativeFlags(Registers.Dbr);
     }
 
     private void Pld(Operand _)
     {
-        cpuBus.Idle();
+        Idle();
         Registers.D = PullWord();
         SetZeroNegativeFlags(Registers.D);
     }
 
     private void Plp(Operand _)
     {
-        cpuBus.Idle();
+        Idle();
         Registers.P = PullByteWrapping();
     }
     

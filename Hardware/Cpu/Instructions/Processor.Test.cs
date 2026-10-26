@@ -11,7 +11,7 @@ public partial class Processor
             SetZeroFlag(test);
             
             data &= (byte)~Registers.A;
-            cpuBus.Idle();
+            Idle();
             WriteByte(operand, data);
         }
         else
@@ -21,7 +21,7 @@ public partial class Processor
             SetZeroFlag(test);
             
             data &= (ushort)~Registers.A;
-            cpuBus.Idle();
+            Idle();
             WriteWordRmw(operand, data);
         }
     }
@@ -35,7 +35,7 @@ public partial class Processor
             SetZeroFlag(test);
             
             data |= (byte)Registers.A;
-            cpuBus.Idle();
+            Idle();
             WriteByte(operand, data);
         }
         else
@@ -45,7 +45,7 @@ public partial class Processor
             SetZeroFlag(test);
 
             data |= Registers.A;
-            cpuBus.Idle();
+            Idle();
             WriteWordRmw(operand, data);
         }
     }

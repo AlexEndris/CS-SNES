@@ -136,6 +136,6 @@ public partial class Processor
         Registers.A = (ushort)((a << 8) | b);
         
         SetZeroNegativeFlags((byte)Registers.A);
-        cpuBus.Idle();
+        Idle();
     }
 }
