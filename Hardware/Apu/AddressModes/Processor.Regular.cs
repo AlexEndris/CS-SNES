@@ -10,4 +10,59 @@ public partial class Processor
         Registers.PC++;
         return CrossPage(address);
     }
+
+    private Operand DirectPage()
+    {
+        byte address = FetchByte();
+        byte page = (byte)(Registers.Page ? 1 : 0);
+        return FixedPage(page, address);
+    }
+
+    private Operand DirectPageY()
+    {
+        byte address = FetchByte();
+        byte page = (byte)(Registers.Page ? 1 : 0);
+        Wait();
+        return FixedPage(page, (byte)(address + Registers.Y));
+    }
+
+    private Operand DirectPageX()
+    {
+        byte address = FetchByte();
+        byte page = (byte)(Registers.Page ? 1 : 0);
+        Wait();
+        return FixedPage(page, (byte)(address + Registers.X));
+    }
+
+    private Operand Absolute()
+    {
+        byte lowAddress = FetchByte();
+        byte highAddress = FetchByte();
+
+        ushort address = (ushort)(highAddress << 8 | lowAddress);
+
+        return CrossPage(address);
+    }
+
+    private Operand AbsoluteX()
+    {
+        byte lowAddress = FetchByte();
+        byte highAddress = FetchByte();
+
+        Wait();
+        ushort address = (ushort)((highAddress << 8 | lowAddress) + Registers.X);
+        
+        return CrossPage(address);
+    }
+
+    private Operand AbsoluteY()
+    {
+        byte lowAddress = FetchByte();
+        byte highAddress = FetchByte();
+
+        Wait();
+        ushort address = (ushort)((highAddress << 8 | lowAddress) + Registers.Y);
+
+        return CrossPage(address);
+    }
 }

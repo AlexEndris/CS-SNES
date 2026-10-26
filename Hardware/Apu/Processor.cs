@@ -27,6 +27,11 @@ public partial class Processor(IApuBus apuBus)
         apuBus.Read(Registers.PC);
     }
     
+    private void Wait()
+    {
+        apuBus.Wait();
+    }
+    
     private void SetZeroFlag(byte value)
     {
         Registers.Zero = value == 0;

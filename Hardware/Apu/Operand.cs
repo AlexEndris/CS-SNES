@@ -14,5 +14,6 @@ public record struct Operand
 
     public static Operand WithinPage(ushort address) => new Operand(address, 0x00FF);
     public static Operand CrossPage(ushort address) => new Operand(address, 0xFFFF);
+    public static Operand FixedPage(byte page, byte address) => new Operand((ushort)((page << 8) | address), 0x00FF);
     public static Operand Nothing => new Operand(0, 0);
 }
