@@ -14,14 +14,14 @@ public partial class Processor
     private Operand DirectPage()
     {
         byte address = FetchByte();
-        byte page = (byte)(Registers.Page ? 1 : 0);
+        byte page = Page();
         return FixedPage(page, address);
     }
 
     private Operand DirectPageY()
     {
         byte address = FetchByte();
-        byte page = (byte)(Registers.Page ? 1 : 0);
+        byte page = Page();
         Wait();
         return FixedPage(page, (byte)(address + Registers.Y));
     }
@@ -29,7 +29,7 @@ public partial class Processor
     private Operand DirectPageX()
     {
         byte address = FetchByte();
-        byte page = (byte)(Registers.Page ? 1 : 0);
+        byte page = Page();
         Wait();
         return FixedPage(page, (byte)(address + Registers.X));
     }

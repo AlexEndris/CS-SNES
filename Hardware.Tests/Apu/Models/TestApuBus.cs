@@ -76,7 +76,7 @@ public class TestApuBus : IApuBus
 
     public void Write(ushort address, byte value)
     {
-        Ram[$"${address:X6}"] = value;
+        Ram[$"${address:X4}"] = value;
         Log.Add(new (){Address = address, Value = value, Kind = "write"});        
     }
 

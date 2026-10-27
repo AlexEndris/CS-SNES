@@ -1,5 +1,7 @@
 ﻿namespace Hardware.Apu;
 
+using static Operand;
+
 public partial class Processor
 {
     private void MovA(Operand operand)
@@ -39,6 +41,63 @@ public partial class Processor
         MovY(Registers.A);
     }
 
+    private void MovXSp()
+    {
+        DummyRead();
+        MovX(Registers.SP);
+    }
+    
+    private void MovSpX()
+    {
+        DummyRead();
+        Registers.SP = Registers.X;
+    }
+
+    private void MovDpDp(Operand operand)
+    {
+        byte value = ReadByte(operand);
+        
+        byte address = FetchByte();
+        byte page = Page();
+        
+        WriteByte(FixedPage(page, address), value);
+    }
+    
+    private void MovDp(Operand operand)
+    {
+        byte value = ReadByte(operand);
+        
+        byte address = FetchByte();
+        byte page = Page();
+
+        Operand destination = FixedPage(page, address);
+        DummyRead(destination);
+        WriteByte(destination, value);
+    }
+
+    private void MovAWrite(Operand operand)
+    {
+        DummyRead(operand);
+        WriteByte(operand, Registers.A);
+    }   
+    
+    private void MovAIndirectWrite(Operand operand)
+    {
+        WriteByte(operand, Registers.A);
+    }
+    
+    private void MovXWrite(Operand operand)
+    {
+        DummyRead(operand);
+        WriteByte(operand, Registers.X);
+    }   
+    
+    private void MovYWrite(Operand operand)
+    {
+        DummyRead(operand);
+        WriteByte(operand, Registers.Y);
+    }   
+    
     private void MovA(byte value)
     {
         Registers.A = value;

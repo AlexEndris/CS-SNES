@@ -14,6 +14,8 @@ public class ApuState
 
     public ushort PC { get; set; }
     
+    public byte SP { get; set; }
+    
     public RamEntry[] Ram { get; set; }
 
     public static implicit operator Registers(ApuState state)
@@ -24,6 +26,7 @@ public class ApuState
             X = state.X,
             Y = state.Y,
             PC = state.PC,
+            SP = state.SP,
             Psw = state.Psw,
         };
     }
