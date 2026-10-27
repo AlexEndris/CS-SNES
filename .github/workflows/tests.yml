@@ -7,7 +7,8 @@ on:
     branches: [ main ]
 
 env:
-  TEST_DATA_PATH: tests/SingleStepTests/65618
+  CPU_TEST_DATA: tests/SingleStepTests/65618
+  SPC_TEST_DATA: tests/SingleStepTests/spc700
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
@@ -23,25 +24,57 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1     # submodule handled separately below, via the cache
+          fetch-depth: 1     # submodules handled separately below, via the cache
 
-      # The commit the repository pins the submodule to. Used as the cache key,
-      # so the cache stays valid until the submodule is deliberately moved.
-      - name: Get test-data commit
+      # The commits the repository pins each submodule to. Each is its own cache
+      # key, so updating one test set doesn't invalidate the other's cache.
+      - name: Get test-data commits
         id: testdata
-        run: echo "sha=$(git rev-parse HEAD:${TEST_DATA_PATH})" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "cpu=$(git rev-parse HEAD:${CPU_TEST_DATA})" >> "$GITHUB_OUTPUT"
+          echo "spc=$(git rev-parse HEAD:${SPC_TEST_DATA})" >> "$GITHUB_OUTPUT"
 
-      - name: Cache test data
-        id: cache
-        uses: actions/cache@v4
+      # ---- 65C816 test data -------------------------------------------------
+      # Restore and save are split so the cache is written straight after the
+      # fetch, even if the tests later fail.
+      - name: Restore 65C816 test data
+        id: cpu-cache
+        uses: actions/cache/restore@v4
         with:
-          path: ${{ env.TEST_DATA_PATH }}
-          key: singlestep-${{ steps.testdata.outputs.sha }}
+          path: ${{ env.CPU_TEST_DATA }}
+          key: singlestep-65816-${{ steps.testdata.outputs.cpu }}
 
-      - name: Fetch test data
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: git submodule update --init --depth 1 "${TEST_DATA_PATH}"
+      - name: Fetch 65C816 test data
+        if: steps.cpu-cache.outputs.cache-hit != 'true'
+        run: git submodule update --init --depth 1 "${CPU_TEST_DATA}"
 
+      - name: Save 65C816 test data
+        if: steps.cpu-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.CPU_TEST_DATA }}
+          key: singlestep-65816-${{ steps.testdata.outputs.cpu }}
+
+      # ---- SPC700 test data -------------------------------------------------
+      - name: Restore SPC700 test data
+        id: spc-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.SPC_TEST_DATA }}
+          key: singlestep-spc700-${{ steps.testdata.outputs.spc }}
+
+      - name: Fetch SPC700 test data
+        if: steps.spc-cache.outputs.cache-hit != 'true'
+        run: git submodule update --init --depth 1 "${SPC_TEST_DATA}"
+
+      - name: Save SPC700 test data
+        if: steps.spc-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.SPC_TEST_DATA }}
+          key: singlestep-spc700-${{ steps.testdata.outputs.spc }}
+
+      # ---- Build and test ---------------------------------------------------
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:

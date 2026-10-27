@@ -14,8 +14,6 @@ public record struct Operand
 
     public static Operand WithinPage(uint address) => new Operand(address, 0x0000FF);
     public static Operand WithinBank(uint address) => new Operand(address, 0x00FFFF);
-
     public static Operand CrossBank(uint address) => new Operand(address, 0xFFFFFF);
-
     public static Operand Nothing => new Operand(0, 0);
 }
