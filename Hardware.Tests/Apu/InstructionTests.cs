@@ -59,7 +59,7 @@ public class InstructionTests
         }
     }
     
-    [Theory(), InlineData("00", 1)]
+    [Theory(Explicit = true), InlineData("00", 1)]
     public async Task SingleCase(string instruction, int caseNumber)
     {
         var test = await ReadTestData<InstructionTestData>(DataDirectorySpc700, $"{instruction}")
