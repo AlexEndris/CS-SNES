@@ -53,6 +53,18 @@ public partial class Processor
         Registers.SP = Registers.X;
     }
 
+    private void MovW(Operand operand)
+    {
+        ushort value = ReadWord(operand);
+        Registers.YA = value;
+        SetZeroNegativeFlags(Registers.YA);
+    }
+    
+    private void MovWWrite(Operand operand)
+    {
+        WriteWord(operand, Registers.YA);
+    }
+    
     private void MovDpDp(Operand operand)
     {
         byte value = ReadByte(operand);
