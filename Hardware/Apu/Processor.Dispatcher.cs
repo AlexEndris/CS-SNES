@@ -12,6 +12,7 @@ public partial class Processor
             case 0x8D: MovY(Immediate()); break;
             case 0x8F: MovDp(Immediate()); break;
             case 0x9D: MovXSp(); break;
+            case 0xBA: MovW(DirectPage()); break;
             case 0xBD: MovSpX(); break;
             case 0xAF: MovAIndirectWrite(IndirectInc(true)); break;
             case 0xBF: MovAIndirect(IndirectInc()); break;
@@ -29,6 +30,7 @@ public partial class Processor
             case 0xD7: MovAWrite(IndirectIndexedY(true)); break;
             case 0xD8: MovXWrite(DirectPage()); break;
             case 0xD9: MovXWrite(DirectPageY()); break;
+            case 0xDA: MovWWrite(DirectPage()); break;
             case 0xDB: MovYWrite(DirectPageX()); break;
             case 0xDD: MovAY(); break;
             case 0xE4: MovA(DirectPage()); break;
